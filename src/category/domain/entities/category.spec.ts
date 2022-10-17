@@ -1,4 +1,6 @@
-import { Category } from "./category";
+import UniqueEntityId from "../../../@shared/domain/unique-entity-id.value-object";
+
+import { Category, CategoryProps } from "./category";
 
 describe("Category Unit Tests", () => {
   test("category constructor", () => {
@@ -17,14 +19,14 @@ describe("Category Unit Tests", () => {
       name: "Movie",
       description: "Movie description",
       is_active: false,
-      created_at
+      created_at,
     });
 
     expect(category.props).toStrictEqual({
       name: "Movie",
       description: "Movie description",
       is_active: false,
-      created_at
+      created_at,
     });
 
     category = new Category({
@@ -55,6 +57,45 @@ describe("Category Unit Tests", () => {
     expect(category.props).toMatchObject({
       name: "Movie",
       created_at,
+    });
+  });
+
+  test("id field", () => {
+    type CategoryData = {
+      props: CategoryProps;
+      id?: UniqueEntityId;
+    };
+
+    const data: CategoryData[] = [
+      {
+        props: {
+          name: "Movie",
+        },
+      },
+      {
+        props: {
+          name: "Movie",
+        },
+        id: null,
+      },
+      {
+        props: {
+          name: "Movie",
+        },
+        id: undefined,
+      },
+      {
+        props: {
+          name: "Movie",
+        },
+        id: new UniqueEntityId(),
+      },
+    ];
+
+    data.forEach((item) => {
+      const category = new Category(item.props, item.id);
+      expect(category.id).not.toBeNull();
+      expect(category.id).toBeInstanceOf(UniqueEntityId)
     });
   });
 
@@ -83,7 +124,7 @@ describe("Category Unit Tests", () => {
     category = new Category({
       name: "Movie",
     });
-    
+
     category["description"] = "other description";
 
     expect(category.description).toBe("other description");
@@ -128,7 +169,7 @@ describe("Category Unit Tests", () => {
 
     category = new Category({
       name: "Movie",
-      created_at
+      created_at,
     });
 
     expect(category.created_at).toBe(created_at);

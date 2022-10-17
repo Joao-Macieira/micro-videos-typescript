@@ -1,3 +1,5 @@
+import UniqueEntityId from "../../../@shared/domain/unique-entity-id.value-object";
+
 export interface CategoryProps {
   name: string;
   description?: string;
@@ -6,9 +8,10 @@ export interface CategoryProps {
 }
 
 export class Category {
-  public readonly id: string;
+  public readonly id: UniqueEntityId;
 
-  constructor(public readonly props: CategoryProps) {
+  constructor(public readonly props: CategoryProps, id?: UniqueEntityId) {
+    this.id = id || new UniqueEntityId();
     this.description = this.props.description;
     this.is_active = this.props.is_active;
     this.props.created_at = this.props.created_at ?? new Date();
