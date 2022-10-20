@@ -1,7 +1,7 @@
 import { validate as uuidValidate } from "uuid";
 
-import InvalidUUIDError from "../../errors/invalid-uuid.error";
-import UniqueEntityId from "../value-objects/unique-entity-id.value-object";
+import InvalidUUIDError from "../../../errors/invalid-uuid.error";
+import UniqueEntityId from "../unique-entity-id.value-object";
 
 describe("UniqueEntityId unit tests", () => {
   const validateSpy = jest.spyOn(UniqueEntityId.prototype as any, "validate");
@@ -17,14 +17,14 @@ describe("UniqueEntityId unit tests", () => {
     const uuid = "e3e15329-fb1a-4ae4-a06b-7dde81ffa4a3";
     const valueObject = new UniqueEntityId(uuid);
 
-    expect(valueObject.id).toBe(uuid);
+    expect(valueObject.value).toBe(uuid);
     expect(validateSpy).toHaveBeenCalled();
   });
 
   test("should create an uuid if constructor not receive one", () => {
     const valueObject = new UniqueEntityId();
 
-    expect(uuidValidate(valueObject.id)).toBeTruthy();
+    expect(uuidValidate(valueObject.value)).toBeTruthy();
     expect(validateSpy).toHaveBeenCalled();
   });
 });
