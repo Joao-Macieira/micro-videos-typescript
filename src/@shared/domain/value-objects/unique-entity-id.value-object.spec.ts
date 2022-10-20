@@ -1,7 +1,7 @@
 import { validate as uuidValidate } from "uuid";
 
-import InvalidUUIDError from "../errors/invalid-uuid.error";
-import UniqueEntityId from "./unique-entity-id.value-object";
+import InvalidUUIDError from "../../errors/invalid-uuid.error";
+import UniqueEntityId from "../value-objects/unique-entity-id.value-object";
 
 describe("UniqueEntityId unit tests", () => {
   const validateSpy = jest.spyOn(UniqueEntityId.prototype as any, "validate");
