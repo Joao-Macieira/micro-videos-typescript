@@ -3,7 +3,7 @@ import UniqueEntityId from "../../../@shared/domain/value-objects/unique-entity-
 import { Category, CategoryProps } from "./category";
 
 describe("Category Unit Tests", () => {
-  test("category constructor", () => {
+  it("category constructor", () => {
     let category = new Category({
       name: "Movie",
     });
@@ -60,7 +60,7 @@ describe("Category Unit Tests", () => {
     });
   });
 
-  test("id field", () => {
+  it("id field", () => {
     type CategoryData = {
       props: CategoryProps;
       id?: UniqueEntityId;
@@ -99,7 +99,7 @@ describe("Category Unit Tests", () => {
     });
   });
 
-  test("getter of name field", () => {
+  it("getter of name field", () => {
     const category = new Category({
       name: "Movie",
     });
@@ -107,7 +107,7 @@ describe("Category Unit Tests", () => {
     expect(category.name).toBe("Movie");
   });
 
-  test("getter and setter of description field", () => {
+  it("getter and setter of description field", () => {
     let category = new Category({
       name: "Movie",
     });
@@ -136,7 +136,7 @@ describe("Category Unit Tests", () => {
     expect(category.description).toBeNull();
   });
 
-  test("getter and setter of is_active field", () => {
+  it("getter and setter of is_active field", () => {
     let category = new Category({
       name: "Movie",
     });
@@ -158,7 +158,7 @@ describe("Category Unit Tests", () => {
     expect(category.is_active).toBeFalsy();
   });
 
-  test("getter of created_at field", () => {
+  it("getter of created_at field", () => {
     let category = new Category({
       name: "Movie",
     });
@@ -173,5 +173,19 @@ describe("Category Unit Tests", () => {
     });
 
     expect(category.created_at).toBe(created_at);
+  });
+
+  it('shuold update category name and description', () => {
+    const category = new Category({
+      name: "Movie",
+    });
+
+    expect(category.name).toBe('Movie');
+    expect(category.description).toBeNull();
+
+    category.update('Series', 'Good to se in family');
+
+    expect(category.name).toBe('Series');
+    expect(category.description).toBe('Good to se in family');
   });
 });
