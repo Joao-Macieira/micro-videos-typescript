@@ -95,7 +95,7 @@ describe("Category Unit Tests", () => {
     data.forEach((item) => {
       const category = new Category(item.props, item.id);
       expect(category.id).not.toBeNull();
-      expect(category.id).toBeInstanceOf(UniqueEntityId)
+      expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId)
     });
   });
 
