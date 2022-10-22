@@ -186,10 +186,10 @@ describe("Category Unit Tests", () => {
     expect(category.name).toBe('Movie');
     expect(category.description).toBeNull();
 
-    category.update('Series', 'Good to se in family');
+    category.update('Series', 'Good to see in family');
 
     expect(category.name).toBe('Series');
-    expect(category.description).toBe('Good to se in family');
+    expect(category.description).toBe('Good to see in family');
   });
 
   it('should activate and deactivate category', () => {
