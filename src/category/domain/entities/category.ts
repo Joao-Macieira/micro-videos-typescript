@@ -48,4 +48,12 @@ export class Category extends Entity<CategoryProps> {
     this.name = name;
     this.description = description;
   }
+
+  activate(): void {
+    this.is_active = true;
+  }
+
+  deactivate(): void {
+    this.is_active = false;
+  }
 }

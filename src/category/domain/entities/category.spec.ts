@@ -175,7 +175,7 @@ describe("Category Unit Tests", () => {
     expect(category.created_at).toBe(created_at);
   });
 
-  it('shuold update category name and description', () => {
+  it('should update category name and description', () => {
     const category = new Category({
       name: "Movie",
     });
@@ -187,5 +187,19 @@ describe("Category Unit Tests", () => {
 
     expect(category.name).toBe('Series');
     expect(category.description).toBe('Good to se in family');
+  });
+
+  it('should activate and deactivate category', () => {
+    const category = new Category({
+      name: "Movie",
+    });
+
+    expect(category.is_active).toBeTruthy();
+
+    category.deactivate();
+    expect(category.is_active).toBeFalsy();
+
+    category.activate();
+    expect(category.is_active).toBeTruthy();
   });
 });
