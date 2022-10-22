@@ -15,8 +15,6 @@ describe("Value objects ubit tests", () => {
     const date = new Date();
 
     const arrange = [
-      { received: null, expected: "null" },
-      { received: undefined, expected: "undefined" },
       { received: "", expected: "" },
       { received: "fake test", expected: "fake test" },
       { received: 0, expected: "0" },
@@ -32,5 +30,27 @@ describe("Value objects ubit tests", () => {
       const vo = new StubValueObject(value.received);
       expect(`${vo}`).toBe(value.expected);
     });
+  });
+
+  it('immutable', () => {
+    const objProp = {
+      prop1: 'value1',
+      deep: {
+        prop2: 'value2',
+        prop3: new Date()
+      }
+    };
+
+    const vo = new StubValueObject(objProp);
+
+    expect(() => {
+      (vo as any).value.prop1 = 'test'
+    }).toThrow("Cannot assign to read only property 'prop1' of object '#<Object>'");
+
+    expect(() => {
+      (vo as any).value.deep.prop2 = 'test'
+    }).toThrow("Cannot assign to read only property 'prop2' of object '#<Object>'");
+
+    expect(vo.value.deep.prop3).toBeInstanceOf(Date);
   });
 });
