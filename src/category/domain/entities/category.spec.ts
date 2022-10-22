@@ -105,6 +105,9 @@ describe("Category Unit Tests", () => {
     });
 
     expect(category.name).toBe("Movie");
+
+    category['name'] = 'Series';
+    expect(category.name).toBe("Series");
   });
 
   it("getter and setter of description field", () => {
