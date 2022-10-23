@@ -3,8 +3,8 @@ import ValidationError from "../errors/validation-error";
 export default class ValidatorRules {
   private constructor(private value: any, private property: string) {}
 
-  static values(values: any, property: string) {
-    return new ValidatorRules(values, property);
+  static values(value: any, property: string) {
+    return new ValidatorRules(value, property);
   }
 
   required(): this {
