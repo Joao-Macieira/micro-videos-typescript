@@ -16,7 +16,7 @@ export default class ValidatorRules {
   }
 
   string(): this {
-    if (typeof this.value === "string") {
+    if (typeof this.value !== "string") {
       throw new ValidationError(`The ${this.property} must be a string`);
     }
 
