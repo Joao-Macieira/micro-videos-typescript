@@ -1,3 +1,4 @@
+import ValidatorRules from "../../../@shared/validators/validator-rules";
 import Entity from "../../../@shared/domain/entities/entity";
 import UniqueEntityId from "../../../@shared/domain/value-objects/unique-entity-id.value-object";
 
@@ -10,6 +11,7 @@ export interface CategoryProps {
 
 export class Category extends Entity<CategoryProps> {
   constructor(public readonly props: CategoryProps, id?: UniqueEntityId) {
+    Category.validate(props);
     super(props, id);
     this.description = this.props.description;
     this.is_active = this.props.is_active;
@@ -45,8 +47,15 @@ export class Category extends Entity<CategoryProps> {
   }
 
   update(name: string, description: string): void {
+    Category.validate({ name, description });
     this.name = name;
     this.description = description;
+  }
+
+  static validate(props: Omit<CategoryProps, 'created_at'>) {
+    ValidatorRules.values(props.name, 'name').required().string();
+    ValidatorRules.values(props.description, 'description').string();
+    ValidatorRules.values(props.is_active, 'is_active').boolean();
   }
 
   activate(): void {
