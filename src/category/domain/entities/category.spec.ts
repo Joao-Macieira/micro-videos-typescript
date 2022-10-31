@@ -3,11 +3,16 @@ import UniqueEntityId from "../../../@shared/domain/value-objects/unique-entity-
 import { Category, CategoryProps } from "./category";
 
 describe("Category Unit Tests", () => {
+  beforeEach(() => {
+    Category.validate = jest.fn();
+  });
+
   it("category constructor", () => {
     let category = new Category({
       name: "Movie",
     });
 
+    expect(Category.validate).toHaveBeenCalled();
     expect(category.props.name).toBe("Movie");
     expect(category.props.description).toBeNull();
     expect(category.props.is_active).toBeTruthy();
@@ -188,6 +193,8 @@ describe("Category Unit Tests", () => {
 
     category.update('Series', 'Good to see in family');
 
+    expect(Category.validate).toHaveBeenCalled();
+    expect(Category.validate).toHaveBeenCalledTimes(2);
     expect(category.name).toBe('Series');
     expect(category.description).toBe('Good to see in family');
   });
