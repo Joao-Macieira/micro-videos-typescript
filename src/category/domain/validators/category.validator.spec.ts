@@ -38,25 +38,18 @@ describe('CategoryValidator tests', () => {
   });
 
   test('valid cases for fields', () => {
-    let isValid = validator.validate({ name: 'some value' });
-    
-    expect(isValid).toBeTruthy();
-    expect(validator.validatedData).toStrictEqual(new CategoryRules({ name: 'some value' }));
+    const arrange = [
+      { name: 'some value' },
+      { name: 'some value', description: undefined },
+      { name: 'some value', description: null },
+      { name: 'some value', is_active: false },
+      { name: 'some value', is_active: true }
+    ];
 
-    isValid = validator.validate({ name: 'some value', description: undefined });
-    expect(isValid).toBeTruthy();
-    expect(validator.validatedData).toStrictEqual(new CategoryRules({ name: 'some value', description: undefined }));
-
-    isValid = validator.validate({ name: 'some value', description: null });
-    expect(isValid).toBeTruthy();
-    expect(validator.validatedData).toStrictEqual(new CategoryRules({ name: 'some value', description: null }));
-
-    isValid = validator.validate({ name: 'some value', is_active: false });
-    expect(isValid).toBeTruthy();
-    expect(validator.validatedData).toStrictEqual(new CategoryRules({ name: 'some value', is_active: false }));
-
-    isValid = validator.validate({ name: 'some value', is_active: true });
-    expect(isValid).toBeTruthy();
-    expect(validator.validatedData).toStrictEqual(new CategoryRules({ name: 'some value', is_active: true }));
+    arrange.forEach((item) => {
+      const isValid = validator.validate(item);
+      expect(isValid).toBeTruthy();
+      expect(validator.validatedData).toStrictEqual(new CategoryRules(item));
+    });
   });
 });
