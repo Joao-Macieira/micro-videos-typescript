@@ -1,6 +1,6 @@
 import { v4 as uuidv4, validate as uuidValidate } from "uuid";
 
-import InvalidUUIDError from "../../errors/invalid-uuid.error";
+import InvalidUUIDError from "../errors/invalid-uuid.error";
 import ValueObject from "./value-objects";
 
 
