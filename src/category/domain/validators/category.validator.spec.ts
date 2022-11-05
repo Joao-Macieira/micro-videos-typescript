@@ -1,49 +1,68 @@
-import CategoryValidatorFactory, { CategoryRules, CategoryValidator } from "./category.validator";
+import CategoryValidatorFactory, {
+  CategoryRules,
+  CategoryValidator,
+} from "./category.validator";
 
-describe('CategoryValidator tests', () => {
+describe("CategoryValidator tests", () => {
   let validator: CategoryValidator;
 
   beforeEach(() => {
     validator = CategoryValidatorFactory.create();
   });
 
-  test('invalidation cases for name field', () => {
-    let isValid = validator.validate(null);
+  test("invalidation cases for name field", () => {
+    const arrange = [
+      {
+        data: null,
+        errors: [
+          "name must be shorter than or equal to 255 characters",
+          "name must be a string",
+          "name should not be empty",
+        ],
+      },
+      {
+        data: '',
+        errors: [
+          "name must be shorter than or equal to 255 characters",
+          "name must be a string",
+          "name should not be empty",
+        ],
+      },
+      {
+        data: { name: '' },
+        errors: [
+          "name should not be empty",
+        ],
+      },
+      {
+        data: { name: 5 as any },
+        errors: [
+          "name must be shorter than or equal to 255 characters",
+          "name must be a string",
+        ],
+      },
+      {
+        data: { name: 't'.repeat(256)},
+        errors: [
+          "name must be shorter than or equal to 255 characters",
+        ],
+      },
+    ];
 
-    expect(isValid).toBeFalsy();
-    expect(validator.errors['name']).toStrictEqual([
-      "name must be shorter than or equal to 255 characters",
-      "name must be a string",
-      "name should not be empty",
-    ]);
-
-    isValid = validator.validate({ name: '' });
-    expect(isValid).toBeFalsy();
-    expect(validator.errors['name']).toStrictEqual([
-      "name should not be empty",
-    ]);
-
-    isValid = validator.validate({ name: 5 as any });
-    expect(isValid).toBeFalsy();
-    expect(validator.errors['name']).toStrictEqual([
-      "name must be shorter than or equal to 255 characters",
-      "name must be a string",
-    ]);
-
-    isValid = validator.validate({ name: 't'.repeat(256) });
-    expect(isValid).toBeFalsy();
-    expect(validator.errors['name']).toStrictEqual([
-      "name must be shorter than or equal to 255 characters",
-    ]);
+    arrange.forEach((item) => {
+      expect({ validator, data: item.data}).containsErrorMessages({
+        name: item.errors
+      })
+    });
   });
 
-  test('valid cases for fields', () => {
+  test("valid cases for fields", () => {
     const arrange = [
-      { name: 'some value' },
-      { name: 'some value', description: undefined },
-      { name: 'some value', description: null },
-      { name: 'some value', is_active: false },
-      { name: 'some value', is_active: true }
+      { name: "some value" },
+      { name: "some value", description: undefined },
+      { name: "some value", description: null },
+      { name: "some value", is_active: false },
+      { name: "some value", is_active: true },
     ];
 
     arrange.forEach((item) => {
