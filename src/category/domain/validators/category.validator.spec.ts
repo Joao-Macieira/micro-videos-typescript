@@ -56,6 +56,12 @@ describe("CategoryValidator tests", () => {
     });
   });
 
+  test('invalidation cases for description field', () => {
+    expect({ validator, data: { description: 5 } }).containsErrorMessages({
+      description: ["description must be a string"]
+    })
+  });
+
   test("valid cases for fields", () => {
     const arrange = [
       { name: "some value" },
