@@ -6,4 +6,5 @@ export default {
   transform: {
     '^.+\\.ts?$': ['@swc/jest'],
   },
+  setupFilesAfterEnv: ["./@shared/domain/tests/validations.ts"],
 };
