@@ -57,7 +57,7 @@ describe("CategoryValidator tests", () => {
   });
 
   test('invalidation cases for description field', () => {
-    expect({ validator, data: { description: 5 } }).containsErrorMessages({
+    expect({ validator, data: { name: 'test', description: 5 } }).containsErrorMessages({
       description: ["description must be a string"]
     })
   });
@@ -65,15 +65,15 @@ describe("CategoryValidator tests", () => {
   test('invalidation cases for is_active field', () => {
     const arrange = [
       {
-        data: { is_active: 5 },
+        data: { name: 'test', is_active: 5 },
         errors: ["is_active must be a boolean value"]
       },
       {
-        data: { is_active: 0 },
+        data: { name: 'test', is_active: 0 },
         errors: ["is_active must be a boolean value"]
       },
       {
-        data: { is_active: 1 },
+        data: { name: 'test', is_active: 1 },
         errors: ["is_active must be a boolean value"]
       },
     ];
