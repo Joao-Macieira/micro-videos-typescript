@@ -34,7 +34,7 @@ export class SearchParams {
     this.filter = props.filter;
   }
 
-  get page() {
+  get page(): number {
     return this._page;
   }
 
@@ -48,7 +48,7 @@ export class SearchParams {
     this._page = _page;
   }
 
-  get per_page() {
+  get per_page(): number {
     return this._per_page;
   }
 
@@ -66,7 +66,7 @@ export class SearchParams {
     this._per_page = _per_page;
   }
 
-  get sort() {
+  get sort(): string | null {
     return this._sort;
   }
 
@@ -75,7 +75,7 @@ export class SearchParams {
       value === null || value === undefined || value === "" ? null : `${value}`;
   }
 
-  get sort_dir() {
+  get sort_dir(): SortDirection | null {
     return this._sort_dir;
   }
 
@@ -90,7 +90,7 @@ export class SearchParams {
     this._sort_dir = dir !== "asc" && dir !== "desc" ? "asc" : dir;
   }
 
-  get filter() {
+  get filter(): string | null {
     return this._filter;
   }
 
