@@ -1,4 +1,4 @@
-import { SearchParams, SearchResult } from "./repository.contracts";
+import { SearchParams, SearchResult } from "../repository.contracts";
 
 describe('SearchParams unit tests', () => {
   test('page prop', () => {
