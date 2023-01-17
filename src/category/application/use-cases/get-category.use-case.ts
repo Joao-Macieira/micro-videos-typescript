@@ -1,6 +1,6 @@
-
 import CategoryRepository from "../../domain/repository/category.repository";
 import { CategoryOutput } from "../dto/category-output.dto";
+import UseCase from "../../../@shared/application/use-case";
 
 export type Input = {
   id: string;
@@ -8,7 +8,7 @@ export type Input = {
 
 export type Output = CategoryOutput;
 
-export default class GetCategoryUseCase {
+export default class GetCategoryUseCase implements UseCase<Input, Output> {
   constructor(
     private categoryRepository: CategoryRepository.Repository
   ) {}
