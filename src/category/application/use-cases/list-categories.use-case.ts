@@ -1,4 +1,4 @@
-import CategoryRepository from "../../domain/repository/category.repository";
+import { CategoryRepository } from "../../domain/repository/category.repository";
 import { CategoryOutput, CategoryOutputMapper } from "../dto/category-output";
 import UseCase from "../../../@shared/application/use-case";
 import { SearchInputDto } from "../../../@shared/application/dto/search-input";
@@ -23,7 +23,7 @@ export default class ListCategoriesUseCase implements UseCase<Input, Output> {
 
   private toOutput(searchResult: CategoryRepository.SearchResult): Output {
     const items = searchResult.items.map(item => CategoryOutputMapper.toOutput(item));
-    const pagination = PaginationOutputMapper.toPaginationOutput(searchResult);
+    const pagination = PaginationOutputMapper.toOutput(searchResult);
 
     return {
       items,
