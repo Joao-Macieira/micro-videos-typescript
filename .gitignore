@@ -3,3 +3,4 @@ node_modules
 tsconfig.tsbuildinfo
 .devcontainer
 __coverage
+dist

@@ -1,4 +1,4 @@
-import UniqueEntityId from "@seedwork/domain/value-objects/unique-entity-id.value-object";
+import UniqueEntityId from "#seedwork/domain/value-objects/unique-entity-id.value-object";
 
 import { Category, CategoryProps } from "./category";
 

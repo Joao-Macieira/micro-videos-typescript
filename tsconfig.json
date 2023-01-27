@@ -13,8 +13,11 @@
     "strictNullChecks": false,
     "skipLibCheck": true,
     "paths": {
-      "@seedwork/*": ["./@seedwork/*"]
-    }
+      "#seedwork/*": ["./@seedwork/*"],
+      "#category/*": ["./category/*"]
+    },
+    "outDir": "./dist",
+    "declaration": true
   },
   "include": ["src/"]
 }

@@ -1,6 +1,6 @@
-import CategoryRepository from "../../domain/repository/category.repository";
+import CategoryRepository from "#category/domain/repository/category.repository";
 import { CategoryOutput, CategoryOutputMapper } from "../dto/category-output";
-import UseCase from "@seedwork/application/use-case";
+import UseCase from "#seedwork/application/use-case";
 
 export type Input = {
   id: string;
