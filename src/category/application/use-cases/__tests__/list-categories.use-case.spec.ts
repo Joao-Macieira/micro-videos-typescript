@@ -1,5 +1,4 @@
 import { Category } from "../../../domain/entities/category";
-import NotFoundError from "../../../../@shared/domain/errors/not-found.error";
 import { CategoryRepository } from "../../../domain/repository/category.repository";
 import CategoryInMemoryRepository from "../../../infra/repository/category-in-memory.repository";
 import ListCategoriesUseCase from "../list-categories.use-case";

@@ -1,6 +1,6 @@
-import Entity from "../../../@shared/domain/entities/entity";
-import UniqueEntityId from "../../../@shared/domain/value-objects/unique-entity-id.value-object";
-import { EntityValidationError } from "../../../@shared/domain/errors/validation-error";
+import Entity from "@seedwork/domain/entities/entity";
+import UniqueEntityId from "@seedwork/domain/value-objects/unique-entity-id.value-object";
+import { EntityValidationError } from "@seedwork/domain/errors/validation-error";
 import CategoryValidatorFactory from "../validators/category.validator";
 
 export interface CategoryProps {

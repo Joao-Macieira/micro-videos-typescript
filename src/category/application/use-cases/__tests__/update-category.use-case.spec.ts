@@ -1,6 +1,6 @@
 import CategoryInMemoryRepository from "../../../infra/repository/category-in-memory.repository";
 import UpdateCategoryUseCase from "../update-category.use-case";
-import NotFoundError from "../../../../@shared/domain/errors/not-found.error";
+import NotFoundError from "@seedwork/domain/errors/not-found.error";
 import { Category } from "../../../../category/domain/entities/category";
 
 
