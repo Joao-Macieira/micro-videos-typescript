@@ -7,6 +7,8 @@
     "ts-node": "ts-node",
     "tsc": "tsc",
     "tsc:check": "tsc --noEmit",
+    "build": "tsc -b ./tsconfig.json",
+    "build:w": "tsc -b ./tsconfig.json -w",
     "clean:tsc": "rm tsconfig.tsbuildinfo",
     "test": "jest",
     "test:cov": "jest --coverage",
@@ -19,6 +21,9 @@
   "imports": {
     "#seedwork/*": "./dist/@seedwork/*.js",
     "#category/*": "./dist/category/*.js"
+  },
+  "exports": {
+    "./category/domain": "./dist/category/domain/index.js"
   },
   "devDependencies": {
     "@swc/core": "^1.3.7",
