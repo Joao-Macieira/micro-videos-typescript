@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Category } from '@core/micro-videos/src/category/domain';
+import { Category } from '@core/micro-videos/category/domain';
 
 @Controller()
 export class AppController {
