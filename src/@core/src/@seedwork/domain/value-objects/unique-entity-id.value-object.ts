@@ -4,7 +4,7 @@ import InvalidUUIDError from "../errors/invalid-uuid.error";
 import ValueObject from "./value-objects";
 
 
-export default class UniqueEntityId extends ValueObject<string> {
+export class UniqueEntityId extends ValueObject<string> {
 
   constructor(readonly id?: string) {
     super(id || uuidv4());
@@ -19,3 +19,5 @@ export default class UniqueEntityId extends ValueObject<string> {
     }
   }
 }
+
+export default UniqueEntityId;

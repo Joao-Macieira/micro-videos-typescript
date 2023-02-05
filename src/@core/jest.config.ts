@@ -1,4 +1,8 @@
 export default {
+  displayName: {
+    name: '@core',
+    color: 'blue'
+  },
   clearMocks: true,
   coverageProvider: "v8",
   rootDir: "src",
