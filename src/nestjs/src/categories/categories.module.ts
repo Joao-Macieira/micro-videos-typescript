@@ -10,13 +10,11 @@ import {
 import { CategoryInMemoryRepository } from '@core/micro-videos/category/infra';
 import { CategoryRepository } from '@core/micro-videos/category/domain';
 
-import { CategoriesService } from './categories.service';
 import { CategoriesController } from './categories.controller';
 
 @Module({
   controllers: [CategoriesController],
   providers: [
-    CategoriesService,
     {
       provide: 'CategoryInMemoryRepository',
       useClass: CategoryInMemoryRepository,
