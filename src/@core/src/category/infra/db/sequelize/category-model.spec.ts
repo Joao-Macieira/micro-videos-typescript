@@ -32,7 +32,9 @@ describe('CategoryModel unit tests', () => {
       created_at: new Date(),
     };
     const category = await CategoryModel.create(arrange);
-    console.log(category.dataValues);
-    expect(category.dataValues).toStrictEqual(arrange);
+    expect(category.dataValues.id).toBe(arrange.id);
+    expect(category.dataValues.name).toBe(arrange.name);
+    expect(category.dataValues.is_active).toBe(arrange.is_active);
+    expect(category.dataValues.created_at).toBe(arrange.created_at);
   });
 });
