@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "jest": "^29.1.2",
     "uuid": "^9.0.0"
   },
   "workspaces": [
@@ -26,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/Joao-Macieira/micro-videos-typescript/issues"
   },
-  "homepage": "https://github.com/Joao-Macieira/micro-videos-typescript#readme"
+  "homepage": "https://github.com/Joao-Macieira/micro-videos-typescript#readme",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
 }
