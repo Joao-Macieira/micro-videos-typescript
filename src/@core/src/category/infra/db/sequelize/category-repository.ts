@@ -1,5 +1,6 @@
 import { Category, CategoryRepository } from "#category/domain";
-import { UniqueEntityId } from "#seedwork/domain";
+import { NotFoundError, UniqueEntityId } from "#seedwork/domain";
+import { CategoryModelMapper } from "./category-mapper";
 import { CategoryModel } from "./category-model";
 
 export class CategorySequelizeRepository implements CategoryRepository.Repository {
@@ -16,7 +17,9 @@ export class CategorySequelizeRepository implements CategoryRepository.Repositor
   }
 
   async findById(id: string | UniqueEntityId): Promise<Category> {
-    throw new Error("Method not implemented.");
+    const _id = `${id}`;
+    const model = await this._get(_id); 
+    return CategoryModelMapper.toEntity(model);
   }
 
   async findAll(): Promise<Category[]> {
@@ -29,6 +32,12 @@ export class CategorySequelizeRepository implements CategoryRepository.Repositor
 
   async delete(id: string | UniqueEntityId): Promise<void> {
     throw new Error("Method not implemented.");
+  }
+
+  private async _get(id: string) {
+    return this.categoryModel.findByPk(id, {
+      rejectOnEmpty: new NotFoundError(`Entity not found using ID ${id}`)
+    });
   }
 }
  
