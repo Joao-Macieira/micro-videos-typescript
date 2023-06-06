@@ -1,27 +1,10 @@
-import { Sequelize } from "sequelize-typescript";
+import { setupSequelize } from "#seedwork/infra/db/testing/helpers/db";
 import { CategoryModel } from "./category-model";
 
 
 describe('CategoryModel unit tests', () => {
-  let sequelize: Sequelize;
-
-  beforeAll(() => 
-    sequelize = new Sequelize({
-      dialect: 'sqlite',
-      host: ':memory:',
-      logging: true,
-      models: [CategoryModel],
-    })
-  );
-
-  beforeEach(async () => {
-    await sequelize.sync({
-      force: true,
-    });
-  });
-
-  afterAll(async () => {
-    await sequelize.close();
+  setupSequelize({
+    models: [CategoryModel]
   });
 
   test("create", async () => {
