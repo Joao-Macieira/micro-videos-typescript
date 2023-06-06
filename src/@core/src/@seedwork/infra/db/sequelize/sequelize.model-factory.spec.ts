@@ -130,4 +130,62 @@ describe('Sequelize model factory tests', () => {
     expect(models[1].name).toBe("test");
     expect(StubModel.mockFactory).toHaveBeenCalledTimes(2);
   });
+
+  test('bulk make method using default count', async () => {
+    let models = await StubModel.factory().bulkMake();
+
+    expect(models).toHaveLength(1);
+    expect(models[0].id).not.toBeNull();
+    expect(models[0].name).not.toBeNull();
+    expect(StubModel.mockFactory).toHaveBeenCalledTimes(1);
+
+    let modelFound = await StubModel.findByPk(models[0].id);
+    expect(modelFound).toBeNull();
+
+    models = await StubModel.factory().bulkMake(() => ({
+      id: "e3e15329-fb1a-4ae4-a06b-7dde81ffa4a3",
+      name: "test",
+    }));
+
+    expect(models).toHaveLength(1);
+    expect(models[0].id).toBe("e3e15329-fb1a-4ae4-a06b-7dde81ffa4a3");
+    expect(models[0].name).toBe("test");
+    expect(StubModel.mockFactory).toHaveBeenCalledTimes(1);
+
+    modelFound = await StubModel.findByPk(models[0].id);
+    expect(modelFound).toBeNull();
+  });
+
+  test('bulk make method using count > 1', async () => {
+    let models = await StubModel.factory().count(2).bulkMake();
+
+    expect(models).toHaveLength(2);
+    expect(models[0].id).not.toBeNull();
+    expect(models[0].name).not.toBeNull();
+    expect(models[1].id).not.toBeNull();
+    expect(models[1].name).not.toBeNull();
+    expect(StubModel.mockFactory).toHaveBeenCalledTimes(2);
+
+    let modelFound1 = await StubModel.findByPk(models[0].id);
+    expect(modelFound1).toBeNull();
+
+    let modelFound2 = await StubModel.findByPk(models[1].id);
+    expect(modelFound2).toBeNull();
+
+    models = await StubModel.factory().count(2).bulkMake(() => ({
+      id: chance.guid({ version: 4 }),
+      name: 'test'
+    }));
+
+    expect(models[0].id).not.toBe(models[1].id);
+    expect(models[0].name).toBe("test");
+    expect(models[1].name).toBe("test");
+    expect(StubModel.mockFactory).toHaveBeenCalledTimes(2);
+
+    modelFound1 = await StubModel.findByPk(models[0].id);
+    expect(modelFound1).toBeNull();
+
+    modelFound2 = await StubModel.findByPk(models[1].id);
+    expect(modelFound2).toBeNull();
+  });
 });
