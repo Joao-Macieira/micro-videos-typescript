@@ -1,7 +1,7 @@
 import CategoryInMemoryRepository from "#category/infra/db/in-memory/category-in-memory.repository";
-import { UpdateCategoryUseCase } from "../update-category.use-case";
 import NotFoundError from "#seedwork/domain/errors/not-found.error";
 import { Category } from "#category/domain/entities/category";
+import UpdateCategoryUseCase from "../../update-category.use-case";
 
 
 describe('UpdateCategoryUseCase unit tests', () => {
