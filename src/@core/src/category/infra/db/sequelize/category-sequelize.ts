@@ -88,7 +88,7 @@ export namespace CategorySequelize {
   
     async findById(id: string | UniqueEntityId): Promise<Category> {
       const _id = `${id}`;
-      const model = await this._get(_id); 
+      const model = await this._get(_id);
       return CategoryModelMapper.toEntity(model);
     }
   
@@ -99,11 +99,16 @@ export namespace CategorySequelize {
     }
   
     async update(entity: Category): Promise<void> {
-      throw new Error("Method not implemented.");
+      await this._get(entity.id);
+      await this.categoryModel.update(entity.toJSON(), {
+        where: { id: entity.id }
+      })
     }
   
     async delete(id: string | UniqueEntityId): Promise<void> {
-      throw new Error("Method not implemented.");
+      const _id = `${id}`;
+      await this._get(_id);
+      this.categoryModel.destroy({ where: { id: _id } });
     }
   
     private async _get(id: string) {
