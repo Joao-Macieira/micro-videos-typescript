@@ -1,6 +1,7 @@
 import { setupSequelize } from "#seedwork/infra/db/testing/helpers/db";
-import { CategoryModel } from "./category-model";
+import { CategorySequelize } from "./category-sequelize";
 
+const { CategoryModel } = CategorySequelize;
 
 describe('CategoryModel unit tests', () => {
   setupSequelize({

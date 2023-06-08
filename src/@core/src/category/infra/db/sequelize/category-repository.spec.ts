@@ -2,20 +2,20 @@ import _chance from 'chance';
 
 import { NotFoundError, UniqueEntityId } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/db/testing/helpers/db";
-import { Category, CategoryRepository } from "#category/domain";
-import { CategorySequelizeRepository } from './category-repository';
-import { CategoryModel } from "./category-model";
-import { CategoryModelMapper } from './category-mapper';
+import { Category, CategoryRepository as CategoryRepositoryContract } from "#category/domain";
+import { CategorySequelize } from './category-sequelize';
 
 const chance = _chance();
+
+const { CategoryModel, CategoryModelMapper, CategoryRepository } = CategorySequelize;
 describe('Category sequelize repository integration test', () => {
   setupSequelize({
     models: [CategoryModel]
   });
-  let repository: CategorySequelizeRepository;
+  let repository: CategorySequelize.CategoryRepository;
 
   beforeEach(async () => {
-    repository = new CategorySequelizeRepository(CategoryModel);
+    repository = new CategoryRepository(CategoryModel);
   });
 
   it('should inserts a new entity', async () => {
@@ -90,9 +90,9 @@ describe('Category sequelize repository integration test', () => {
       }));
       
       const spyToEntity = jest.spyOn(CategoryModelMapper, 'toEntity');
-      const searchOutput = await repository.search(new CategoryRepository.SearchParams({}));
+      const searchOutput = await repository.search(new CategoryRepositoryContract.SearchParams({}));
 
-      expect(searchOutput).toBeInstanceOf(CategoryRepository.SearchResult);
+      expect(searchOutput).toBeInstanceOf(CategoryRepositoryContract.SearchResult);
       expect(spyToEntity).toHaveBeenCalledTimes(15);
       expect(searchOutput.toJSON()).toMatchObject({
         total: 16,
@@ -129,7 +129,7 @@ describe('Category sequelize repository integration test', () => {
         created_at: new Date(created_at.getTime() + 100 + index)
       }));
 
-      const searchOutput = await repository.search(new CategoryRepository.SearchParams({}));
+      const searchOutput = await repository.search(new CategoryRepositoryContract.SearchParams({}));
       
       const items = searchOutput.items;
       [...items].reverse().forEach((item, index) => {
@@ -153,13 +153,13 @@ describe('Category sequelize repository integration test', () => {
 
       const categories = await CategoryModel.bulkCreate(categoriesProps);
 
-      let searchOutput = await repository.search(new CategoryRepository.SearchParams({
+      let searchOutput = await repository.search(new CategoryRepositoryContract.SearchParams({
         page: 1,
         per_page: 2,
         filter: "TEST"
       }));
 
-      expect(searchOutput.toJSON()).toMatchObject(new CategoryRepository.SearchResult({
+      expect(searchOutput.toJSON()).toMatchObject(new CategoryRepositoryContract.SearchResult({
         items: [
           CategoryModelMapper.toEntity(categories[0]),
           CategoryModelMapper.toEntity(categories[2])
@@ -172,13 +172,13 @@ describe('Category sequelize repository integration test', () => {
         filter: 'TEST',
       }).toJSON(true));
 
-      searchOutput = await repository.search(new CategoryRepository.SearchParams({
+      searchOutput = await repository.search(new CategoryRepositoryContract.SearchParams({
         page: 2,
         per_page: 2,
         filter: "TEST"
       }));
 
-      expect(searchOutput.toJSON()).toMatchObject(new CategoryRepository.SearchResult({
+      expect(searchOutput.toJSON()).toMatchObject(new CategoryRepositoryContract.SearchResult({
         items: [
           CategoryModelMapper.toEntity(categories[3])
         ],
@@ -212,12 +212,12 @@ describe('Category sequelize repository integration test', () => {
 
       const arrage = [
         {
-          params: new CategoryRepository.SearchParams({
+          params: new CategoryRepositoryContract.SearchParams({
             page: 1,
             per_page: 2,
             sort: 'name',
           }),
-          result: new CategoryRepository.SearchResult({
+          result: new CategoryRepositoryContract.SearchResult({
             items: [
               CategoryModelMapper.toEntity(categories[1]),
               CategoryModelMapper.toEntity(categories[0])
@@ -231,12 +231,12 @@ describe('Category sequelize repository integration test', () => {
           })
         },
         {
-          params: new CategoryRepository.SearchParams({
+          params: new CategoryRepositoryContract.SearchParams({
             page: 2,
             per_page: 2,
             sort: 'name',
           }),
-          result: new CategoryRepository.SearchResult({
+          result: new CategoryRepositoryContract.SearchResult({
             items: [
               CategoryModelMapper.toEntity(categories[4]),
               CategoryModelMapper.toEntity(categories[2])
@@ -250,12 +250,12 @@ describe('Category sequelize repository integration test', () => {
           })
         },
         {
-          params: new CategoryRepository.SearchParams({
+          params: new CategoryRepositoryContract.SearchParams({
             page: 3,
             per_page: 2,
             sort: 'name',
           }),
-          result: new CategoryRepository.SearchResult({
+          result: new CategoryRepositoryContract.SearchResult({
             items: [
               CategoryModelMapper.toEntity(categories[3]),
             ],
@@ -292,8 +292,8 @@ describe('Category sequelize repository integration test', () => {
 
       const arrange = [
         {
-          params: new CategoryRepository.SearchParams({ page: 1, per_page: 2, sort: 'name', filter: 'TEST' }),
-          result: new CategoryRepository.SearchResult({
+          params: new CategoryRepositoryContract.SearchParams({ page: 1, per_page: 2, sort: 'name', filter: 'TEST' }),
+          result: new CategoryRepositoryContract.SearchResult({
             items: [
               new Category(categoriesProps[2]),
               new Category(categoriesProps[4]),
@@ -307,8 +307,8 @@ describe('Category sequelize repository integration test', () => {
           })
         },
         {
-          params: new CategoryRepository.SearchParams({ page: 2, per_page: 2, sort: 'name', filter: 'TEST' }),
-          result: new CategoryRepository.SearchResult({
+          params: new CategoryRepositoryContract.SearchParams({ page: 2, per_page: 2, sort: 'name', filter: 'TEST' }),
+          result: new CategoryRepositoryContract.SearchResult({
             items: [
               new Category(categoriesProps[0]),
             ],
@@ -321,8 +321,8 @@ describe('Category sequelize repository integration test', () => {
           })
         },
         {
-          params: new CategoryRepository.SearchParams({ page: 1, per_page: 2, sort: 'name', sort_dir: 'desc', filter: 'TEST' }),
-          result: new CategoryRepository.SearchResult({
+          params: new CategoryRepositoryContract.SearchParams({ page: 1, per_page: 2, sort: 'name', sort_dir: 'desc', filter: 'TEST' }),
+          result: new CategoryRepositoryContract.SearchResult({
             items: [
               new Category(categoriesProps[0]),
               new Category(categoriesProps[4]),
@@ -336,8 +336,8 @@ describe('Category sequelize repository integration test', () => {
           })
         },
         {
-          params: new CategoryRepository.SearchParams({ page: 1, per_page: 2, sort: 'name', sort_dir: 'desc', filter: 'a' }),
-          result: new CategoryRepository.SearchResult({
+          params: new CategoryRepositoryContract.SearchParams({ page: 1, per_page: 2, sort: 'name', sort_dir: 'desc', filter: 'a' }),
+          result: new CategoryRepositoryContract.SearchResult({
             items: [
               new Category(categoriesProps[1]),
             ],
