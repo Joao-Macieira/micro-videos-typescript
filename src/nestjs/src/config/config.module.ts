@@ -34,7 +34,7 @@ export const CONFIG_DB_SCHEMA: joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
     is: 'mysql',
     then: joi.required(),
   }),
-  DB_PORT: joi.number().when('DB_VENDOR', {
+  DB_PORT: joi.number().integer().when('DB_VENDOR', {
     is: 'mysql',
     then: joi.required(),
   }),
