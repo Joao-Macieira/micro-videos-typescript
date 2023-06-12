@@ -4,7 +4,7 @@ import {
   ConfigModule as NestConfigModule,
 } from '@nestjs/config';
 import { join } from 'path';
-import joi from 'joi';
+import * as joi from 'joi';
 
 type DB_SCHEMA_TYPE = {
   DB_VENDOR: 'mysql' | 'sqlite';

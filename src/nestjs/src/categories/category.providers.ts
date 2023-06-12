@@ -6,7 +6,10 @@ import {
   UpdateCategoryUseCase,
 } from '@core/micro-videos/category/application';
 import { CategoryRepository } from '@core/micro-videos/category/domain';
-import { CategoryInMemoryRepository } from '@core/micro-videos/category/infra';
+import {
+  CategoryInMemoryRepository,
+  CategorySequelize,
+} from '@core/micro-videos/category/infra';
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace CATEGORY_PROVIDERS {
@@ -14,6 +17,16 @@ export namespace CATEGORY_PROVIDERS {
     export const CATEGORY_IN_MEMORY_REPOSITORIES = {
       provide: 'CategoryInMemoryRepository',
       useClass: CategoryInMemoryRepository,
+    };
+
+    export const CATEGORY_SEQUELIZE_REPOSITORIES = {
+      provide: 'CategorySequelizeRepository',
+      useClass: CategorySequelize.CategoryRepository,
+    };
+
+    export const CATEGORY_REPOSITORY = {
+      provide: 'CategoryRepository',
+      useExisting: 'CategorySequelizeRepository',
     };
   }
 
@@ -23,7 +36,7 @@ export namespace CATEGORY_PROVIDERS {
       useFactory: (categoryRepository: CategoryRepository.Repository) => {
         return new CreateCategoryUseCase.UseCase(categoryRepository);
       },
-      inject: [REPOSITORIES.CATEGORY_IN_MEMORY_REPOSITORIES.provide],
+      inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
     };
 
     export const UPDATE_CATEGORY_USE_CASE = {
@@ -31,7 +44,7 @@ export namespace CATEGORY_PROVIDERS {
       useFactory: (categoryRepository: CategoryRepository.Repository) => {
         return new UpdateCategoryUseCase.UseCase(categoryRepository);
       },
-      inject: [REPOSITORIES.CATEGORY_IN_MEMORY_REPOSITORIES.provide],
+      inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
     };
 
     export const DELETE_CATEGORY_USE_CASE = {
@@ -39,7 +52,7 @@ export namespace CATEGORY_PROVIDERS {
       useFactory: (categoryRepository: CategoryRepository.Repository) => {
         return new DeleteCategoryUseCase.UseCase(categoryRepository);
       },
-      inject: [REPOSITORIES.CATEGORY_IN_MEMORY_REPOSITORIES.provide],
+      inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
     };
 
     export const GET_CATEGORY_USE_CASE = {
@@ -47,7 +60,7 @@ export namespace CATEGORY_PROVIDERS {
       useFactory: (categoryRepository: CategoryRepository.Repository) => {
         return new GetCategoryUseCase.UseCase(categoryRepository);
       },
-      inject: [REPOSITORIES.CATEGORY_IN_MEMORY_REPOSITORIES.provide],
+      inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
     };
 
     export const LIST_CATEGORY_USE_CASE = {
@@ -55,7 +68,7 @@ export namespace CATEGORY_PROVIDERS {
       useFactory: (categoryRepository: CategoryRepository.Repository) => {
         return new ListCategoriesUseCase.UseCase(categoryRepository);
       },
-      inject: [REPOSITORIES.CATEGORY_IN_MEMORY_REPOSITORIES.provide],
+      inject: [REPOSITORIES.CATEGORY_REPOSITORY.provide],
     };
   }
 }

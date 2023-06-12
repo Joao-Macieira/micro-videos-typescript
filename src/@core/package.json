@@ -19,7 +19,9 @@
   "author": "",
   "license": "ISC",
   "imports": {
+    "#seedwork/domain": "./dist/@seedwork/domain/index.js",
     "#seedwork/*": "./dist/@seedwork/*.js",
+    "#category/domain": "./dist/category/domain/index.js",
     "#category/*": "./dist/category/*.js"
   },
   "exports": {
