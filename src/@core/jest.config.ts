@@ -10,7 +10,10 @@ export default {
   transform: {
     '^.+\\.ts?$': ['@swc/jest'],
   },
-  setupFilesAfterEnv: ["./@seedwork/domain/tests/validations.ts"],
+  setupFilesAfterEnv: [
+    "./@seedwork/domain/tests/validations.ts",
+    "./@seedwork/domain/tests/jest.ts",
+  ],
   coverageDirectory: '<rootDir>/../__coverage',
   coverageThreshold: {
     global: {
