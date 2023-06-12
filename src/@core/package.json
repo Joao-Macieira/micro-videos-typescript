@@ -13,7 +13,7 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "cti": "cti",
-    "cti:@core": "sh ./cti.sh"
+    "cti:make": "sh ./cti.sh"
   },
   "keywords": [],
   "author": "",
