@@ -45,19 +45,19 @@ export const CONFIG_DB_SCHEMA: joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
 @Module({})
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}): DynamicModule {
+    const { envFilePath, ...rest } = options;
+
     return super.forRoot({
       isGlobal: true,
       envFilePath: [
-        ...(Array.isArray(options.envFilePath)
-          ? options.envFilePath
-          : [options.envFilePath]),
+        ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath]),
         join(__dirname, `../envs/.env.${process.env.NODE_ENV}`),
         join(__dirname, '../envs/.env'),
       ],
       validationSchema: joi.object({
         ...CONFIG_DB_SCHEMA,
       }),
-      ...options,
+      ...rest,
     });
   }
 }
