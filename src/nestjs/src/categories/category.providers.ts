@@ -10,6 +10,7 @@ import {
   CategoryInMemoryRepository,
   CategorySequelize,
 } from '@core/micro-videos/category/infra';
+import { getModelToken } from '@nestjs/sequelize';
 
 /* eslint-disable @typescript-eslint/no-namespace */
 export namespace CATEGORY_PROVIDERS {
@@ -21,7 +22,10 @@ export namespace CATEGORY_PROVIDERS {
 
     export const CATEGORY_SEQUELIZE_REPOSITORIES = {
       provide: 'CategorySequelizeRepository',
-      useClass: CategorySequelize.CategoryRepository,
+      useFactory: (categoryModel: typeof CategorySequelize.CategoryModel) => {
+        return new CategorySequelize.CategoryRepository(categoryModel);
+      },
+      inject: [getModelToken(CategorySequelize.CategoryModel)],
     };
 
     export const CATEGORY_REPOSITORY = {

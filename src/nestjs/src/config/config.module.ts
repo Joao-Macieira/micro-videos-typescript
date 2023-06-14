@@ -46,6 +46,7 @@ export const CONFIG_DB_SCHEMA: joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
 export class ConfigModule extends NestConfigModule {
   static forRoot(options: ConfigModuleOptions = {}): DynamicModule {
     return super.forRoot({
+      isGlobal: true,
       envFilePath: [
         ...(Array.isArray(options.envFilePath)
           ? options.envFilePath
