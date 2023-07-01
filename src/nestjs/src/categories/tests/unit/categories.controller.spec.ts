@@ -72,13 +72,15 @@ describe('CategoriesController unit tests', () => {
     //@ts-expect-error
     controller['updateCategoryUsecase'] = mockUpdateUseCase;
 
-    const output = await controller.update(id, input);
+    const presenter = await controller.update(id, input);
 
     expect(mockUpdateUseCase.execute).toHaveBeenCalledWith({
       id,
       ...input,
     });
-    expect(output).toStrictEqual(expectedOutput);
+
+    expect(presenter).toBeInstanceOf(CategoryPresenter);
+    expect(presenter).toStrictEqual(new CategoryPresenter(expectedOutput));
   });
 
   it('should delete a category', async () => {
@@ -119,10 +121,11 @@ describe('CategoriesController unit tests', () => {
     //@ts-expect-error
     controller['getCategoryUseCase'] = mockGetUseCase;
 
-    const output = await controller.findOne(id);
+    const presenter = await controller.findOne(id);
 
     expect(mockGetUseCase.execute).toHaveBeenCalledWith({ id });
-    expect(output).toStrictEqual(expectedOutput);
+    expect(presenter).toBeInstanceOf(CategoryPresenter);
+    expect(presenter).toStrictEqual(new CategoryPresenter(expectedOutput));
   });
 
   it('should lists a category', async () => {

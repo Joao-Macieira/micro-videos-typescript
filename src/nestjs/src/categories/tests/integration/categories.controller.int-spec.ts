@@ -7,14 +7,14 @@ import {
   ListCategoriesUseCase,
   UpdateCategoryUseCase,
 } from '@core/micro-videos/category/application';
+import { CategoryRepository } from '@core/micro-videos/category/domain';
+import { CategorySequelize } from '@core/micro-videos/category/infra';
+import { NotFoundError } from '@core/micro-videos/@seedwork/domain';
 import { CategoriesController } from '../../categories.controller';
 import { ConfigModule } from '../../../config/config.module';
 import { DatabaseModule } from '../../../database/database.module';
 import { CategoriesModule } from '../../../categories/categories.module';
 import { CATEGORY_PROVIDERS } from '../../category.providers';
-import { CategoryRepository } from '@core/micro-videos/category/domain';
-import { CategorySequelize } from '@core/micro-videos/category/infra';
-import { NotFoundError } from '@core/micro-videos/@seedwork/domain';
 
 describe('CategoriesController integration tests', () => {
   let categoriesController: CategoriesController;
@@ -257,5 +257,16 @@ describe('CategoriesController integration tests', () => {
     expect(repository.findById(category.id)).rejects.toThrowError(
       new NotFoundError(`Entity not found using ID ${category.id}`),
     );
+  });
+
+  it('should get a category', async () => {
+    const category = await CategorySequelize.CategoryModel.factory().create();
+    const presenter = await categoriesController.findOne(category.id);
+
+    expect(presenter.id).toBe(category.id);
+    expect(presenter.name).toBe(category.name);
+    expect(presenter.description).toBe(category.description);
+    expect(presenter.is_active).toBe(category.is_active);
+    expect(presenter.created_at).toStrictEqual(category.created_at);
   });
 });

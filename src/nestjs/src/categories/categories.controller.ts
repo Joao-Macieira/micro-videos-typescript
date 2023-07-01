@@ -52,19 +52,23 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.getCategoryUseCase.execute({ id });
+  async findOne(@Param('id') id: string) {
+    const output = await this.getCategoryUseCase.execute({ id });
+
+    return new CategoryPresenter(output);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.updateCategoryUsecase.execute({
+    const output = await this.updateCategoryUsecase.execute({
       id,
       ...updateCategoryDto,
     });
+
+    return new CategoryPresenter(output);
   }
   @HttpCode(204)
   @Delete(':id')
