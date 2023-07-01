@@ -13,6 +13,7 @@ import { DatabaseModule } from '../../../database/database.module';
 import { CategoriesModule } from '../../../categories/categories.module';
 import { CATEGORY_PROVIDERS } from '../../category.providers';
 import { CategoryRepository } from '@core/micro-videos/category/domain';
+import { CategorySequelize } from '@core/micro-videos/category/infra';
 
 describe('CategoriesController integration tests', () => {
   let categoriesController: CategoriesController;
@@ -128,6 +129,119 @@ describe('CategoriesController integration tests', () => {
         expect(output.description).toBe(expectedPresenter.description);
         expect(output.is_active).toBe(expectedPresenter.is_active);
         expect(output.created_at).toStrictEqual(entity.created_at);
+      },
+    );
+  });
+
+  describe('should update a category', () => {
+    let category: CategorySequelize.CategoryModel;
+
+    beforeEach(async () => {
+      category = await CategorySequelize.CategoryModel.factory().create();
+    });
+
+    const arrange = [
+      {
+        request: {
+          name: 'Movie',
+        },
+        expectedPresenter: {
+          name: 'Movie',
+          description: null,
+          is_active: true,
+        },
+      },
+      {
+        request: {
+          name: 'Movie',
+          description: null,
+        },
+        expectedPresenter: {
+          name: 'Movie',
+          description: null,
+          is_active: true,
+        },
+      },
+      {
+        request: {
+          name: 'Movie',
+          is_active: false,
+        },
+        expectedPresenter: {
+          name: 'Movie',
+          description: null,
+          is_active: false,
+        },
+      },
+      {
+        request: {
+          name: 'Movie',
+          description: 'movie description',
+          is_active: true,
+        },
+        expectedPresenter: {
+          name: 'Movie',
+          description: 'movie description',
+          is_active: true,
+        },
+      },
+      {
+        request: {
+          name: 'Movie',
+          description: 'movie description',
+          is_active: false,
+        },
+        expectedPresenter: {
+          name: 'Movie',
+          description: 'movie description',
+          is_active: false,
+        },
+      },
+      {
+        categoryProps: {
+          name: 'category test',
+          is_active: false,
+        },
+        request: {
+          name: 'Movie',
+          description: 'movie description',
+          is_active: true,
+        },
+        expectedPresenter: {
+          name: 'Movie',
+          description: 'movie description',
+          is_active: true,
+        },
+      },
+    ];
+
+    test.each(arrange)(
+      'with request $request',
+      async ({ categoryProps, request, expectedPresenter }) => {
+        if (categoryProps) {
+          await category.update(categoryProps);
+        }
+
+        const presenter = await categoriesController.update(
+          category.id,
+          request,
+        );
+
+        const entity = await repository.findById(presenter.id);
+
+        expect(entity).toMatchObject({
+          id: presenter.id,
+          name: expectedPresenter.name,
+          description: expectedPresenter.description,
+          is_active: expectedPresenter.is_active,
+          created_at: presenter.created_at,
+        });
+
+        expect(presenter.id).toBe(entity.id);
+        expect(presenter.name).toBe(expectedPresenter.name);
+        expect(presenter.description).toBe(expectedPresenter.description);
+        expect(presenter.is_active).toBe(expectedPresenter.is_active);
+        expect(presenter.created_at).toStrictEqual(entity.created_at);
       },
     );
   });
