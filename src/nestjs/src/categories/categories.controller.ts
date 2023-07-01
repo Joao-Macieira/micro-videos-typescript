@@ -20,6 +20,7 @@ import {
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SearchCategoryDto } from './dto/search-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoryPresenter } from './presenter/category.presenter';
 
 @Controller('categories')
 export class CategoriesController {
@@ -39,8 +40,10 @@ export class CategoriesController {
   private listCategoryUseCase: ListCategoriesUseCase.UseCase;
 
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.createCategoryUseCase.execute(createCategoryDto);
+  async create(@Body() createCategoryDto: CreateCategoryDto) {
+    const output = await this.createCategoryUseCase.execute(createCategoryDto);
+
+    return new CategoryPresenter(output);
   }
 
   @Get()

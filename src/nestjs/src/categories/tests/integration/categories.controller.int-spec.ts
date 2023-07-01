@@ -54,7 +54,7 @@ describe('CategoriesController integration tests', () => {
         request: {
           name: 'Movie',
         },
-        expectedOutput: {
+        expectedPresenter: {
           name: 'Movie',
           description: null,
           is_active: true,
@@ -65,7 +65,7 @@ describe('CategoriesController integration tests', () => {
           name: 'Movie',
           description: null,
         },
-        expectedOutput: {
+        expectedPresenter: {
           name: 'Movie',
           description: null,
           is_active: true,
@@ -76,7 +76,7 @@ describe('CategoriesController integration tests', () => {
           name: 'Movie',
           is_active: true,
         },
-        expectedOutput: {
+        expectedPresenter: {
           name: 'Movie',
           description: null,
           is_active: true,
@@ -88,7 +88,7 @@ describe('CategoriesController integration tests', () => {
           description: 'movie description',
           is_active: true,
         },
-        expectedOutput: {
+        expectedPresenter: {
           name: 'Movie',
           description: 'movie description',
           is_active: true,
@@ -100,7 +100,7 @@ describe('CategoriesController integration tests', () => {
           description: 'movie description',
           is_active: false,
         },
-        expectedOutput: {
+        expectedPresenter: {
           name: 'Movie',
           description: 'movie description',
           is_active: false,
@@ -110,23 +110,23 @@ describe('CategoriesController integration tests', () => {
 
     test.each(arrange)(
       'with request $request',
-      async ({ request, expectedOutput }) => {
+      async ({ request, expectedPresenter }) => {
         const output = await categoriesController.create(request);
 
         const entity = await repository.findById(output.id);
 
         expect(entity).toMatchObject({
           id: output.id,
-          name: expectedOutput.name,
-          description: expectedOutput.description,
-          is_active: expectedOutput.is_active,
+          name: expectedPresenter.name,
+          description: expectedPresenter.description,
+          is_active: expectedPresenter.is_active,
           created_at: output.created_at,
         });
 
         expect(output.id).toBe(entity.id);
-        expect(output.name).toBe(expectedOutput.name);
-        expect(output.description).toBe(expectedOutput.description);
-        expect(output.is_active).toBe(expectedOutput.is_active);
+        expect(output.name).toBe(expectedPresenter.name);
+        expect(output.description).toBe(expectedPresenter.description);
+        expect(output.is_active).toBe(expectedPresenter.is_active);
         expect(output.created_at).toStrictEqual(entity.created_at);
       },
     );
