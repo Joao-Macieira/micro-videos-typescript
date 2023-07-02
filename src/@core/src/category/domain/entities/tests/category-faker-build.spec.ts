@@ -46,6 +46,35 @@ describe('CategoryFajerBuild unit tests', () => {
       expect(categories[0].name).toBe('test name 0');
       expect(categories[1].name).toBe('test name 1');
     });
+
+    test('invalid empty case', () => {
+      faker.withInvalidName(undefined);
+      expect(faker['name']).toBeUndefined();
+
+      faker.withInvalidName(null);
+      expect(faker['name']).toBeNull();
+
+      faker.withInvalidName("");
+      expect(faker['name']).toBe("");
+    });
+
+    test('invalid too long case', () => {
+      faker.withInvalidNameTooLong();
+      expect(faker['name']).toHaveLength(256);
+
+      const tooLongName = 'a'.repeat(257);
+      faker.withInvalidNameTooLong(tooLongName);
+      expect(faker['name']).toHaveLength(257);
+      expect(faker['name']).toBe(tooLongName);
+    });
+
+    test('invalid not a string case', () => {
+      faker.withInvalidNameNotAString();
+      expect(faker['name']).toBe(5);
+
+      faker.withInvalidNameNotAString(10);
+      expect(faker['name']).toBe(10);
+    });
   });
 
   describe('description prop', () => {
@@ -89,6 +118,14 @@ describe('CategoryFajerBuild unit tests', () => {
       expect(categories[0].description).toBe('test description 0');
       expect(categories[1].description).toBe('test description 1');
     });
+
+    test('invalid not a string case', () => {
+      faker.withInvalidDescriptionNotAString();
+      expect(faker['description']).toBe(5);
+
+      faker.withInvalidDescriptionNotAString(11);
+      expect(faker['description']).toBe(11);
+    });
   });
 
   describe('is_active prop', () => {
@@ -110,6 +147,25 @@ describe('CategoryFajerBuild unit tests', () => {
     test('deactivate', () => {
       faker.deactive();
       expect(faker['is_active']).toBeFalsy();
+    });
+
+    test('invalid empty case', () => {
+      faker.withInvalidIsActiveEmpty(undefined);
+      expect(faker['is_active']).toBeUndefined();
+
+      faker.withInvalidIsActiveEmpty(null);
+      expect(faker['is_active']).toBeNull();
+
+      faker.withInvalidIsActiveEmpty("");
+      expect(faker['is_active']).toBe("");
+    });
+
+    test('invalid not a boolean case', () => {
+      faker.withInvalidIsActiveNotABoolean();
+      expect(faker['is_active']).toBe('fake boolean');
+
+      faker.withInvalidIsActiveNotABoolean(7);
+      expect(faker['is_active']).toBe(7);
     });
   });
 });
