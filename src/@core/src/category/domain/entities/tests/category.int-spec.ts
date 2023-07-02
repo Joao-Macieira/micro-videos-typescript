@@ -1,4 +1,4 @@
-import { Category } from "./category";
+import { Category } from "../category";
 
 describe('category integration tests', () => {
   describe('create method', () => {
