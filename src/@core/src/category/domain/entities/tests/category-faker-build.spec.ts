@@ -47,4 +47,69 @@ describe('CategoryFajerBuild unit tests', () => {
       expect(categories[1].name).toBe('test name 1');
     });
   });
+
+  describe('description prop', () => {
+    const faker = CategoryFakeBuilder.aCategory();
+
+    it('should be a function', () => {
+      expect(typeof faker['description'] === 'function').toBeTruthy();
+    });
+
+    it('should call paragraph method', () => {
+      const chance = Chance();
+      const paragraphMethod = jest.spyOn(chance, 'paragraph');
+
+      faker['chance'] = chance;
+      faker.build();
+
+      expect(paragraphMethod).toHaveBeenCalled();
+    });
+
+    test('withDescription', () => {
+      faker.withDescription('test description');
+      expect(faker['description']).toBe('test description');
+
+      faker.withDescription(null);
+      expect(faker['description']).toBeNull();
+
+      faker.withDescription(() => 'test description');
+      //@ts-expect-error description is callable
+      expect(faker['description']()).toBe('test description');
+    });
+
+    it('should pass index to name factory', () => {
+      faker.withDescription((index) => `test description ${index}`);
+      
+      const category = faker.build() as Category;
+      expect(category.description).toBe('test description 0');
+
+      const fakeMany = CategoryFakeBuilder.theCategories(2);
+      fakeMany.withDescription((index) => `test description ${index}`);
+      const categories = fakeMany.build();
+      expect(categories[0].description).toBe('test description 0');
+      expect(categories[1].description).toBe('test description 1');
+    });
+  });
+
+  describe('is_active prop', () => {
+    const faker = CategoryFakeBuilder.aCategory();
+
+    it('should be a function', () => {
+      expect(typeof faker['is_active'] === 'function').toBeTruthy();
+    });
+
+    it('shoud be true', () => {
+      expect(faker['is_active']).toBeTruthy();
+    });
+
+    test('activate', () => {
+      faker.active();
+      expect(faker['is_active']).toBeTruthy();
+    });
+
+    test('deactivate', () => {
+      faker.deactive();
+      expect(faker['is_active']).toBeFalsy();
+    });
+  });
 });
