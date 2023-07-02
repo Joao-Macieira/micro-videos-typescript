@@ -25,8 +25,8 @@ export class CategoryFakeBuilder<TBuild = any> {
     return new CategoryFakeBuilder<Category>();
   }
 
-  static theCategory() {
-    return new CategoryFakeBuilder<Category[]>();
+  static theCategories(countObjs: number) {
+    return new CategoryFakeBuilder<Category[]>(countObjs);
   }
 
   withName(name: PropOrFactory<string>) {
