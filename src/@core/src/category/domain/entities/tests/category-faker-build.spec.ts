@@ -26,7 +26,8 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('withName', () => {
-      faker.withName('test name');
+      const $this = faker.withName('test name');
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['name']).toBe('test name');
 
       faker.withName(() => 'test name');
@@ -35,9 +36,10 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     it('should pass index to name factory', () => {
-      faker.withName((index) => `test name ${index}`);
+      const $this = faker.withName((index) => `test name ${index}`);
       
       const category = faker.build() as Category;
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(category.name).toBe('test name 0');
 
       const fakeMany = CategoryFakeBuilder.theCategories(2);
@@ -48,7 +50,8 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('invalid empty case', () => {
-      faker.withInvalidName(undefined);
+      const $this = faker.withInvalidName(undefined);
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['name']).toBeUndefined();
 
       faker.withInvalidName(null);
@@ -59,7 +62,8 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('invalid too long case', () => {
-      faker.withInvalidNameTooLong();
+      const $this = faker.withInvalidNameTooLong();
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['name']).toHaveLength(256);
 
       const tooLongName = 'a'.repeat(257);
@@ -69,7 +73,8 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('invalid not a string case', () => {
-      faker.withInvalidNameNotAString();
+      const $this = faker.withInvalidNameNotAString();
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['name']).toBe(5);
 
       faker.withInvalidNameNotAString(10);
@@ -95,7 +100,8 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('withDescription', () => {
-      faker.withDescription('test description');
+      const $this = faker.withDescription('test description');
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['description']).toBe('test description');
 
       faker.withDescription(null);
@@ -107,9 +113,10 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     it('should pass index to name factory', () => {
-      faker.withDescription((index) => `test description ${index}`);
+      const $this = faker.withDescription((index) => `test description ${index}`);
       
       const category = faker.build() as Category;
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(category.description).toBe('test description 0');
 
       const fakeMany = CategoryFakeBuilder.theCategories(2);
@@ -120,7 +127,8 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('invalid not a string case', () => {
-      faker.withInvalidDescriptionNotAString();
+      const $this = faker.withInvalidDescriptionNotAString();
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['description']).toBe(5);
 
       faker.withInvalidDescriptionNotAString(11);
@@ -140,17 +148,20 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('activate', () => {
-      faker.active();
+      const $this = faker.active();
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['is_active']).toBeTruthy();
     });
 
     test('deactivate', () => {
-      faker.deactive();
+      const $this = faker.deactive();
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['is_active']).toBeFalsy();
     });
 
     test('invalid empty case', () => {
-      faker.withInvalidIsActiveEmpty(undefined);
+      const $this = faker.withInvalidIsActiveEmpty(undefined);
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['is_active']).toBeUndefined();
 
       faker.withInvalidIsActiveEmpty(null);
@@ -161,7 +172,8 @@ describe('CategoryFajerBuild unit tests', () => {
     });
 
     test('invalid not a boolean case', () => {
-      faker.withInvalidIsActiveNotABoolean();
+      const $this = faker.withInvalidIsActiveNotABoolean();
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
       expect(faker['is_active']).toBe('fake boolean');
 
       faker.withInvalidIsActiveNotABoolean(7);

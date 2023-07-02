@@ -46,6 +46,7 @@ export class CategoryFakeBuilder<TBuild = any> {
 
   withInvalidNameTooLong(value?: string) {
     this.name = value ?? this.chance.word({ length: 256 });
+    return this;
   }
 
   withDescription(description: PropOrFactory<string | null>) {
