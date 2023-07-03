@@ -1,9 +1,43 @@
 import { Chance } from "chance";
 
+import { UniqueEntityId } from "#seedwork/domain";
 import { CategoryFakeBuilder } from "../category-fake-builder";
 import { Category } from "../category";
 
 describe('CategoryFajerBuild unit tests', () => {
+  describe('unique_entity_id prop', () => {
+    const faker = CategoryFakeBuilder.aCategory();
+
+    it('should be undefined', () => {
+      expect(faker['unique_entity_id']).toBeUndefined();
+    });
+
+    test('withUniqueEntityId', () => {
+      const uniqueEntityId = new UniqueEntityId();
+      const $this = faker.withUniqueEntityId(uniqueEntityId);
+
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
+      expect(faker['unique_entity_id']).toBe(uniqueEntityId);
+
+      faker.withUniqueEntityId(() => uniqueEntityId);
+      expect(faker['unique_entity_id']()).toBe(uniqueEntityId);
+    });
+
+    it('should pass index to unique_entity_id factory', () => {
+      let mockFactory = jest.fn().mockReturnValue(new UniqueEntityId);
+      faker.withUniqueEntityId(mockFactory);
+      faker.build();
+      expect(mockFactory).toHaveBeenCalledWith(0);
+
+      mockFactory = jest.fn().mockReturnValue(new UniqueEntityId);
+      const fakerMany = CategoryFakeBuilder.theCategories(2);
+      fakerMany.withUniqueEntityId(mockFactory);
+      fakerMany.build();
+      expect(mockFactory).toHaveBeenCalledWith(0);
+      expect(mockFactory).toHaveBeenCalledWith(1);
+    });
+  });
+
   describe('name prop', () => {
     let faker: CategoryFakeBuilder<Category | Category[]>;
 
@@ -178,6 +212,38 @@ describe('CategoryFajerBuild unit tests', () => {
 
       faker.withInvalidIsActiveNotABoolean(7);
       expect(faker['is_active']).toBe(7);
+    });
+  });
+
+  describe('created_at prop', () => {
+    const faker = CategoryFakeBuilder.aCategory();
+
+    it('should be undefined', () => {
+      expect(faker['created_at']).toBeUndefined();
+    });
+
+    test('withCreatedAt', () => {
+      const date = new Date();
+      const $this = faker.withCreatedAt(date);
+      expect($this).toBeInstanceOf(CategoryFakeBuilder);
+      expect(faker['created_at']).toBe(date);
+
+      faker.withCreatedAt(() => date);
+      expect(faker['created_at']()).toBe(date);
+    });
+
+    it('should pass index to created_at factory', () => {
+      const date = new Date();
+      faker.withCreatedAt((index) => new Date(date.getTime() + index + 2));
+      const category = faker.build();
+      expect(category.created_at.getTime()).toBe(date.getTime() + 2);
+
+      const fakerMany = CategoryFakeBuilder.theCategories(2);
+      fakerMany.withCreatedAt((index) => new Date(date.getTime() + index + 2));
+      const categories = fakerMany.build();
+
+      expect(categories[0].created_at.getTime()).toBe(date.getTime() + 2);
+      expect(categories[1].created_at.getTime()).toBe(date.getTime() + 1 + 2);
     });
   });
 });
