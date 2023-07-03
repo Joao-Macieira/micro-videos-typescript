@@ -1,12 +1,9 @@
-import _chance from 'chance';
-
 import { CategorySequelize } from "#category/infra/db/sequelize/category-sequelize";
 import { Category } from '#category/domain';
 import { setupSequelize } from '#seedwork/infra/db/testing/helpers/db';
 import { ListCategoriesUseCase } from "../../list-categories.use-case";
 
 const { CategoryRepository, CategoryModel } = CategorySequelize;
-const chance = _chance();
 
 describe('ListCategoriesUseCase integration tests', () => {
   let useCase: ListCategoriesUseCase.UseCase;
