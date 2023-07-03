@@ -23,7 +23,7 @@ export class CategoryFakeBuilder<TBuild = any> {
 
   private countObjs: number;
 
-  constructor(countObjs: number = 1) {
+  private constructor(countObjs: number = 1) {
     this.countObjs = countObjs;
     this.chance = Chance();
   }

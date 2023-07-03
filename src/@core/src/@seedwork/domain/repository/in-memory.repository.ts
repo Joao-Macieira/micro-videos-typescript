@@ -18,6 +18,10 @@ export abstract class InMemoryRepository<E extends Entity>
     this.items.push(entity);
   }
 
+  async bulkInsert(entities: E[]): Promise<void> {
+    this.items.push(...entities);
+  }
+
   async findById(id: string | uniqueEntityId): Promise<E> {
     return this._get(`${id}`);
   }
@@ -52,6 +56,9 @@ export abstract class InMemorySearchableRepository<E extends Entity>
   extends InMemoryRepository<E>
   implements SearchableRepositoryInterface<E>
 {
+  bulkInsert(entities: E[]): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
   sortableFields: string[] = [];
 
   async search(props: SearchParams): Promise<SearchResult<E>> {

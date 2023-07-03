@@ -1,3 +1,4 @@
+import { Category } from "#category/domain";
 import { CategorySequelize } from "#category/infra/db/sequelize/category-sequelize";
 import NotFoundError from "#seedwork/domain/errors/not-found.error";
 import { setupSequelize } from "#seedwork/infra/db/testing/helpers/db";
@@ -22,99 +23,100 @@ describe('UpdateCategoryUseCase integration tests', () => {
   });
 
   it('should update a category', async () => {
-    const model = await CategoryModel.factory().create();
-
-    let output = await useCase.execute({ id: model.id, name: 'test' });
+    const entity = Category.fake().aCategory().build();
+    repository.insert(entity);
+    
+    let output = await useCase.execute({ id: entity.id, name: 'test' });
     expect(output).toStrictEqual({
-      id: model.id,
+      id: entity.id,
       name: 'test',
       description: null,
-      is_active: model.is_active,
-      created_at: model.created_at,
+      is_active: entity.is_active,
+      created_at: entity.created_at,
     });
 
     const arrange = [
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: 'test description'
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: 'test description',
-          is_active: model.is_active,
-          created_at: model.created_at,
+          is_active: entity.is_active,
+          created_at: entity.created_at,
         }
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: 'test'
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: null,
-          is_active: model.is_active,
-          created_at: model.created_at,
+          is_active: entity.is_active,
+          created_at: entity.created_at,
         }
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           is_active: false,
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: null,
           is_active: false,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         }
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: null,
           is_active: false,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         }
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           is_active: true
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: null,
           is_active: true,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         }
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: 'some description',
           is_active: false,
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: 'test',
           description: 'some description',
           is_active: false,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         }
       },
     ];

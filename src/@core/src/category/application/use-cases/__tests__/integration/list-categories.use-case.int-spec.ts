@@ -1,6 +1,7 @@
 import _chance from 'chance';
 
 import { CategorySequelize } from "#category/infra/db/sequelize/category-sequelize";
+import { Category } from '#category/domain';
 import { setupSequelize } from '#seedwork/infra/db/testing/helpers/db';
 import { ListCategoriesUseCase } from "../../list-categories.use-case";
 
@@ -20,18 +21,19 @@ describe('ListCategoriesUseCase integration tests', () => {
 
   it('should return output using empty input with categories ordered by created_at', async () => {
     const created_at = new Date();
-      const models = await CategoryModel.factory().count(2).bulkCreate((index) => ({
-        id: chance.guid({ version: 4 }),
-        name: `category-${index}`,
-        description: 'Some description',
-        is_active: true,
-        created_at: new Date(created_at.getTime() + 100 + index)
-      }));
+    const faker = Category.fake().theCategories(2);
+
+    const entities = faker
+      .withName((index) => `category-${index}`)
+      .withCreatedAt((index) => new Date(created_at.getTime() + 100 + index))
+      .build();
+
+    await repository.bulkInsert(entities);
 
     const output = await useCase.execute({});
 
     expect(output).toMatchObject({
-      items: [...models].reverse().map(CategorySequelize.CategoryModelMapper.toEntity).map(item => item.toJSON()),
+      items: [...entities].reverse().map(item => item.toJSON()),
       total: 2,
       current_page: 1,
       per_page: 15,
@@ -40,14 +42,16 @@ describe('ListCategoriesUseCase integration tests', () => {
   });
 
   it('should returns output using pagination, sort and filter', async () => {
-    const models = CategoryModel.factory().count(5).bulkMake();
-    models[0].name = 'a';
-    models[1].name = 'AAA';
-    models[2].name = 'AaA';
-    models[3].name = 'bbb';
-    models[4].name = 'c';
+    const faker = Category.fake().aCategory();
+    const entities = [
+      faker.withName('a').build(),
+      faker.withName('AAA').build(),
+      faker.withName('AaA').build(),
+      faker.withName('bbb').build(),
+      faker.withName('c').build(),
+    ];
 
-    await CategoryModel.bulkCreate(models.map(model => model.toJSON()));
+    await repository.bulkInsert(entities);
 
     let output = await useCase.execute({
       page: 1,
@@ -56,7 +60,7 @@ describe('ListCategoriesUseCase integration tests', () => {
       filter: 'a'
     });
     expect(output).toStrictEqual({
-      items: [models[1], models[2]].map(CategorySequelize.CategoryModelMapper.toEntity).map(item => item.toJSON()),
+      items: [entities[1], entities[2]].map(item => item.toJSON()),
       total: 3,
       current_page: 1,
       per_page: 2,
@@ -70,7 +74,7 @@ describe('ListCategoriesUseCase integration tests', () => {
       filter: 'a'
     });
     expect(output).toStrictEqual({
-      items: [models[0]].map(CategorySequelize.CategoryModelMapper.toEntity).map(item => item.toJSON()),
+      items: [entities[0]].map(item => item.toJSON()),
       total: 3,
       current_page: 2,
       per_page: 2,
@@ -85,7 +89,7 @@ describe('ListCategoriesUseCase integration tests', () => {
       filter: 'a'
     });
     expect(output).toStrictEqual({
-      items: [models[0], models[2]].map(CategorySequelize.CategoryModelMapper.toEntity).map(item => item.toJSON()),
+      items: [entities[0], entities[2]].map(item => item.toJSON()),
       total: 3,
       current_page: 1,
       per_page: 2,
