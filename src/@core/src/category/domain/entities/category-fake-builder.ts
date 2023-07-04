@@ -99,47 +99,51 @@ export class CategoryFakeBuilder<TBuild = any> {
   build(): TBuild {
     const categories = new Array(this.countObjs).fill(undefined).map(
       (_, index) =>
-        new Category({
-          ...(this._unique_entity_id && {
-            unique_entity_id: this.callFactory(this._unique_entity_id, index),
-          }),
-          name: this.callFactory(this._name, index),
-          description: this.callFactory(this._description, index),
-          is_active: this.callFactory(this._is_active, index),
-          ...(this._created_at && {
-            created_at: this.callFactory(this._created_at, index),
-          }),
-        })
+        new Category(
+          {
+            name: this.callFactory(this._name, index),
+            description: this.callFactory(this._description, index),
+            is_active: this.callFactory(this._is_active, index),
+            ...(this._created_at && {
+              created_at: this.callFactory(this._created_at, index),
+            }),
+          },
+          !this._unique_entity_id
+            ? undefined
+            : this.callFactory(this._unique_entity_id, index)
+        )
     );
 
     return this.countObjs === 1 ? (categories[0] as any) : categories;
   }
 
   get unique_entity_id() {
-    return this.getValue('unique_entity_id');
+    return this.getValue("unique_entity_id");
   }
 
   get name() {
-    return this.getValue('name');
+    return this.getValue("name");
   }
 
   get description() {
-    return this.getValue('description');
+    return this.getValue("description");
   }
 
   get is_active() {
-    return this.getValue('is_active');
+    return this.getValue("is_active");
   }
 
   get created_at() {
-    return this.getValue('created_at');
+    return this.getValue("created_at");
   }
 
   private getValue(prop: string) {
-    const optional = ['unique_entity_id', 'created_at'];
+    const optional = ["unique_entity_id", "created_at"];
     const privateProp = `_${prop}`;
     if (!this[privateProp] && optional.includes(prop)) {
-      throw new Error(`Property ${prop} not have a factory, use 'with' methods`);
+      throw new Error(
+        `Property ${prop} not have a factory, use 'with' methods`
+      );
     }
 
     return this.callFactory(this[privateProp], 0);
