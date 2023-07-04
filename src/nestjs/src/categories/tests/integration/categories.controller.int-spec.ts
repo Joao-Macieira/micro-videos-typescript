@@ -7,8 +7,10 @@ import {
   ListCategoriesUseCase,
   UpdateCategoryUseCase,
 } from '@core/micro-videos/category/application';
-import { CategoryRepository } from '@core/micro-videos/category/domain';
-import { CategorySequelize } from '@core/micro-videos/category/infra';
+import {
+  Category,
+  CategoryRepository,
+} from '@core/micro-videos/category/domain';
 import { NotFoundError } from '@core/micro-videos/@seedwork/domain';
 import { CategoriesController } from '../../categories.controller';
 import { ConfigModule } from '../../../config/config.module';
@@ -135,10 +137,10 @@ describe('CategoriesController integration tests', () => {
   });
 
   describe('should update a category', () => {
-    let category: CategorySequelize.CategoryModel;
+    const category = Category.fake().aCategory().build();
 
     beforeEach(async () => {
-      category = await CategorySequelize.CategoryModel.factory().create();
+      repository.insert(category);
     });
 
     const arrange = [
@@ -199,10 +201,6 @@ describe('CategoriesController integration tests', () => {
         },
       },
       {
-        categoryProps: {
-          name: 'category test',
-          is_active: false,
-        },
         request: {
           name: 'Movie',
           description: 'movie description',
@@ -218,11 +216,7 @@ describe('CategoriesController integration tests', () => {
 
     test.each(arrange)(
       'with request $request',
-      async ({ categoryProps, request, expectedPresenter }) => {
-        if (categoryProps) {
-          await category.update(categoryProps);
-        }
-
+      async ({ request, expectedPresenter }) => {
         const presenter = await categoriesController.update(
           category.id,
           request,
@@ -248,7 +242,8 @@ describe('CategoriesController integration tests', () => {
   });
 
   it('should delete a category', async () => {
-    const category = await CategorySequelize.CategoryModel.factory().create();
+    const category = Category.fake().aCategory().build();
+    await repository.insert(category);
 
     const response = await categoriesController.remove(category.id);
 
@@ -260,7 +255,8 @@ describe('CategoriesController integration tests', () => {
   });
 
   it('should get a category', async () => {
-    const category = await CategorySequelize.CategoryModel.factory().create();
+    const category = Category.fake().aCategory().build();
+    await repository.insert(category);
     const presenter = await categoriesController.findOne(category.id);
 
     expect(presenter.id).toBe(category.id);
