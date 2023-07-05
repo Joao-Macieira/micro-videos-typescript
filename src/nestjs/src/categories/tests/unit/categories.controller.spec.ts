@@ -10,7 +10,10 @@ import {
 import { CategoriesController } from '../../categories.controller';
 import { CreateCategoryDto } from '../../dto/create-category.dto';
 import { UpdateCategoryDto } from '../../dto/update-category.dto';
-import { CategoryPresenter } from '../../presenter/category.presenter';
+import {
+  CategoryCollectionPresenter,
+  CategoryPresenter,
+} from '../../presenter/category.presenter';
 
 describe('CategoriesController unit tests', () => {
   let controller: CategoriesController;
@@ -160,9 +163,10 @@ describe('CategoriesController unit tests', () => {
       filter: 'test',
     };
 
-    const output = await controller.search(searchParams);
+    const presenter = await controller.search(searchParams);
 
+    expect(presenter).toBeInstanceOf(CategoryCollectionPresenter);
     expect(mockSearchUseCase.execute).toHaveBeenCalledWith(searchParams);
-    expect(output).toStrictEqual(expectedOutput);
+    expect(presenter).toEqual(new CategoryCollectionPresenter(expectedOutput));
   });
 });

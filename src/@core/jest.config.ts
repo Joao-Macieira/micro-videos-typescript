@@ -14,7 +14,7 @@ export default {
     "./@seedwork/domain/tests/validations.ts",
     "./@seedwork/domain/tests/jest.ts",
   ],
-  coverageDirectory: '<rootDir>/../__coverage',
+  coverageDirectory: '../__coverage',
   coverageThreshold: {
     global: {
       statements : 80,
