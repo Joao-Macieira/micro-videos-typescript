@@ -20,7 +20,11 @@ import { ConfigModule } from '../../../config/config.module';
 import { DatabaseModule } from '../../../database/database.module';
 import { CategoriesModule } from '../../../categories/categories.module';
 import { CATEGORY_PROVIDERS } from '../../category.providers';
-import { CategoryCollectionPresenter } from '../../../categories/presenter/category.presenter';
+import {
+  CategoryCollectionPresenter,
+  CategoryPresenter,
+} from '../../../categories/presenter/category.presenter';
+import { CategoryFixture } from '../../../categories/fixtures';
 
 describe('CategoriesController integration tests', () => {
   let categoriesController: CategoriesController;
@@ -57,85 +61,23 @@ describe('CategoriesController integration tests', () => {
   });
 
   describe('should create category', () => {
-    const arrange = [
-      {
-        request: {
-          name: 'Movie',
-        },
-        expectedPresenter: {
-          name: 'Movie',
-          description: null,
-          is_active: true,
-        },
-      },
-      {
-        request: {
-          name: 'Movie',
-          description: null,
-        },
-        expectedPresenter: {
-          name: 'Movie',
-          description: null,
-          is_active: true,
-        },
-      },
-      {
-        request: {
-          name: 'Movie',
-          is_active: true,
-        },
-        expectedPresenter: {
-          name: 'Movie',
-          description: null,
-          is_active: true,
-        },
-      },
-      {
-        request: {
-          name: 'Movie',
-          description: 'movie description',
-          is_active: true,
-        },
-        expectedPresenter: {
-          name: 'Movie',
-          description: 'movie description',
-          is_active: true,
-        },
-      },
-      {
-        request: {
-          name: 'Movie',
-          description: 'movie description',
-          is_active: false,
-        },
-        expectedPresenter: {
-          name: 'Movie',
-          description: 'movie description',
-          is_active: false,
-        },
-      },
-    ];
+    const arrange = CategoryFixture.arrangeForSave();
 
     test.each(arrange)(
-      'with request $request',
-      async ({ request, expectedPresenter }) => {
-        const output = await categoriesController.create(request);
+      'with request $send_data',
+      async ({ send_data, expected }) => {
+        const presenter = await categoriesController.create(send_data);
 
-        const entity = await repository.findById(output.id);
+        const entity = await repository.findById(presenter.id);
 
         expect(entity).toMatchObject({
-          id: output.id,
-          name: expectedPresenter.name,
-          description: expectedPresenter.description,
-          is_active: expectedPresenter.is_active,
-          created_at: output.created_at,
+          id: presenter.id,
+          created_at: presenter.created_at,
+          ...send_data,
+          ...expected,
         });
 
-        expect(output.id).toBe(entity.id);
-        expect(output.name).toBe(expectedPresenter.name);
-        expect(output.description).toBe(expectedPresenter.description);
-        expect(output.is_active).toBe(expectedPresenter.is_active);
-        expect(output.created_at).toStrictEqual(entity.created_at);
+        expect(presenter).toEqual(new CategoryPresenter(entity));
       },
     );
   });
