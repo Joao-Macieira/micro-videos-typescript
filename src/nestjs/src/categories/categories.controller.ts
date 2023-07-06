@@ -25,7 +25,6 @@ import {
   CategoryCollectionPresenter,
   CategoryPresenter,
 } from './presenter/category.presenter';
-
 @Controller('categories')
 export class CategoriesController {
   @Inject(CreateCategoryUseCase.UseCase)

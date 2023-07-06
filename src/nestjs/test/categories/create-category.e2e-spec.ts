@@ -7,6 +7,7 @@ import { CategoryRepository } from '@core/micro-videos/category/domain';
 import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { CategoryFixture } from '../../src/categories/fixtures';
 import { CategoriesController } from '../../src/categories/categories.controller';
+import { applyGlobalConfig } from '../../src/global-config';
 
 describe('CategoriesController (e2e)', () => {
   let app: INestApplication;
@@ -21,6 +22,7 @@ describe('CategoriesController (e2e)', () => {
       CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
     );
     app = moduleFixture.createNestApplication();
+    applyGlobalConfig(app);
     await app.init();
   });
 
@@ -37,16 +39,18 @@ describe('CategoriesController (e2e)', () => {
 
           const keysInResponse = CategoryFixture.keysInCategoriesResponse();
 
-          expect(Object.keys(response.body)).toStrictEqual(keysInResponse);
+          expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);
 
-          const category = await categoryRepository.findById(response.body.id);
+          const category = await categoryRepository.findById(
+            response.body.data.id,
+          );
           const presenter = CategoriesController.categoryToResponse(
             category.toJSON(),
           );
           const serialized = instanceToPlain(presenter);
 
-          expect(response.body).toStrictEqual(serialized);
-          expect(response.body).toStrictEqual({
+          expect(response.body.data).toStrictEqual(serialized);
+          expect(response.body.data).toStrictEqual({
             id: serialized.id,
             created_at: serialized.created_at,
             ...send_data,
