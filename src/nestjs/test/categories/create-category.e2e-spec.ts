@@ -1,10 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import { instanceToPlain } from 'class-transformer';
 import { AppModule } from '../../src/app.module';
 import { CategoryRepository } from '@core/micro-videos/category/domain';
 import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { CategoryFixture } from '../../src/categories/fixtures';
+import { CategoriesController } from '../../src/categories/categories.controller';
 
 describe('CategoriesController (e2e)', () => {
   let app: INestApplication;
@@ -38,17 +40,15 @@ describe('CategoriesController (e2e)', () => {
           expect(Object.keys(response.body)).toStrictEqual(keysInResponse);
 
           const category = await categoryRepository.findById(response.body.id);
+          const presenter = CategoriesController.categoryToResponse(
+            category.toJSON(),
+          );
+          const serialized = instanceToPlain(presenter);
 
+          expect(response.body).toStrictEqual(serialized);
           expect(response.body).toStrictEqual({
-            id: category.id,
-            name: category.name,
-            description: category.description,
-            is_active: category.is_active,
-            created_at: category.created_at.toISOString(),
-          });
-          expect(response.body).toStrictEqual({
-            id: category.id,
-            created_at: category.created_at.toISOString(),
+            id: serialized.id,
+            created_at: serialized.created_at,
             ...send_data,
             ...expected,
           });
