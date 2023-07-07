@@ -27,12 +27,22 @@ describe('CategoriesController (e2e)', () => {
   });
 
   describe('POST /categories', () => {
-    it('validation', async () => {
-      const response = await request(app.getHttpServer())
-        .post('/categories')
-        .send({})
-        .expect(422);
+    describe('should a response error with 422 when request body is invalid', () => {
+      const invalidRequest = CategoryFixture.arrangeInvalidRequest();
+      const arrange = Object.keys(invalidRequest).map((key) => ({
+        label: key,
+        value: invalidRequest[key],
+      }));
+
+      test.each(arrange)('when body is $label', ({ value }) => {
+        return request(app.getHttpServer())
+          .post('/categories')
+          .send(value.send_data)
+          .expect(422)
+          .expect(value.expected);
+      });
     });
+
     describe('should create a category', () => {
       const arrange = CategoryFixture.arrangeForSave();
       test.each(arrange)(
