@@ -39,6 +39,7 @@ describe('CategoriesController (e2e)', () => {
 
           const keysInResponse = CategoryFixture.keysInCategoriesResponse();
 
+          expect(Object.keys(response.body)).toStrictEqual(['data']);
           expect(Object.keys(response.body.data)).toStrictEqual(keysInResponse);
 
           const category = await categoryRepository.findById(
