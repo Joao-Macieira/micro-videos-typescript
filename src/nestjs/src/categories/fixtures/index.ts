@@ -140,6 +140,7 @@ export class CategoryFixture {
       },
     };
   }
+
   static arrangeInvalidRequest() {
     const faker = Category.fake().aCategory();
     const defaultExpected = {
@@ -208,5 +209,44 @@ export class CategoryFixture {
         },
       },
     };
+  }
+}
+
+export class CreateCategoryFixture {
+  static keysInCategoriesResponse() {
+    return CategoryFixture.keysInCategoriesResponse();
+  }
+
+  static arrangeForSave() {
+    return CategoryFixture.arrangeForSave();
+  }
+
+  static arrangeForEntityValidationError() {
+    return CategoryFixture.arrangeForEntityValidationError();
+  }
+
+  static arrangeInvalidRequest() {
+    return CategoryFixture.arrangeInvalidRequest();
+  }
+}
+
+export class UpdateCategoryFixture {
+  static keysInCategoriesResponse() {
+    return CategoryFixture.keysInCategoriesResponse();
+  }
+
+  static arrangeForSave() {
+    return CategoryFixture.arrangeForSave();
+  }
+
+  static arrangeInvalidRequest() {
+    return CategoryFixture.arrangeInvalidRequest();
+  }
+
+  static arrangeForEntityValidationError() {
+    const { IS_ACTIVE_NOT_A_BOOLEAN, ...keys } =
+      CategoryFixture.arrangeForEntityValidationError();
+
+    return keys;
   }
 }
