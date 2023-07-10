@@ -57,6 +57,89 @@ export class CategoryFixture {
     ];
   }
 
+  static arrangeForEntityValidationError() {
+    const faker = Category.fake().aCategory();
+    const defaultExpected = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+    };
+    return {
+      BODY_EMPTY: {
+        send_data: {},
+        expected: {
+          message: [
+            'name must be shorter than or equal to 255 characters',
+            'name must be a string',
+            'name should not be empty',
+          ],
+          ...defaultExpected,
+        },
+      },
+      NAME_UNDEFINED: {
+        send_data: {
+          name: faker.withInvalidName(undefined).name,
+        },
+        expected: {
+          message: [
+            'name must be shorter than or equal to 255 characters',
+            'name must be a string',
+            'name should not be empty',
+          ],
+          ...defaultExpected,
+        },
+      },
+      NAME_NULL: {
+        send_data: {
+          name: faker.withInvalidName(null).name,
+        },
+        expected: {
+          message: [
+            'name must be shorter than or equal to 255 characters',
+            'name must be a string',
+            'name should not be empty',
+          ],
+          ...defaultExpected,
+        },
+      },
+      NAME_EMPTY: {
+        send_data: {
+          name: faker.withInvalidName('').name,
+        },
+        expected: {
+          message: ['name should not be empty'],
+          ...defaultExpected,
+        },
+      },
+      DESCRIPTION_NOT_A_STRING: {
+        send_data: {
+          description: faker.withInvalidDescriptionNotAString().description,
+        },
+        expected: {
+          message: [
+            'name must be shorter than or equal to 255 characters',
+            'name must be a string',
+            'name should not be empty',
+            'description must be a string',
+          ],
+          ...defaultExpected,
+        },
+      },
+      IS_ACTIVE_NOT_A_BOOLEAN: {
+        send_data: {
+          is_active: faker.withInvalidIsActiveNotABoolean().is_active,
+        },
+        expected: {
+          message: [
+            'name must be shorter than or equal to 255 characters',
+            'name must be a string',
+            'name should not be empty',
+            'is_active must be a boolean value',
+          ],
+          ...defaultExpected,
+        },
+      },
+    };
+  }
   static arrangeInvalidRequest() {
     const faker = Category.fake().aCategory();
     const defaultExpected = {
