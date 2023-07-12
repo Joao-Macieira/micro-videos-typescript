@@ -1,8 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
+import { getConnectionToken } from '@nestjs/sequelize';
 import { instanceToPlain } from 'class-transformer';
-import { AppModule } from '../../src/app.module';
 import {
   Category,
   CategoryRepository,
@@ -10,30 +8,7 @@ import {
 import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { UpdateCategoryFixture } from '../../src/categories/fixtures';
 import { CategoriesController } from '../../src/categories/categories.controller';
-import { applyGlobalConfig } from '../../src/global-config';
-import { getConnectionToken } from '@nestjs/sequelize';
-
-function startApp({
-  beforeInit,
-}: { beforeInit?: (app: INestApplication) => void } = {}) {
-  let _app: INestApplication;
-
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-    _app = moduleFixture.createNestApplication();
-    applyGlobalConfig(_app);
-    beforeInit && beforeInit(_app);
-    await _app.init();
-  });
-
-  return {
-    get app() {
-      return _app;
-    },
-  };
-}
+import { startApp } from '../../src/@shared/testing/helpers';
 
 describe('CategoriesController (e2e)', () => {
   let categoryRepository: CategoryRepository.Repository;
