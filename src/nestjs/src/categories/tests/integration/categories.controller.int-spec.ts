@@ -11,10 +11,7 @@ import {
   Category,
   CategoryRepository,
 } from '@core/micro-videos/category/domain';
-import {
-  NotFoundError,
-  SortDirection,
-} from '@core/micro-videos/@seedwork/domain';
+import { NotFoundError } from '@core/micro-videos/@seedwork/domain';
 import { CategoriesController } from '../../categories.controller';
 import { ConfigModule } from '../../../config/config.module';
 import { DatabaseModule } from '../../../database/database.module';
