@@ -11,6 +11,7 @@ import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { UpdateCategoryFixture } from '../../src/categories/fixtures';
 import { CategoriesController } from '../../src/categories/categories.controller';
 import { applyGlobalConfig } from '../../src/global-config';
+import { getConnectionToken } from '@nestjs/sequelize';
 
 function startApp({
   beforeInit,
@@ -128,7 +129,9 @@ describe('CategoriesController (e2e)', () => {
       const app = startApp();
       const arrange = UpdateCategoryFixture.arrangeForSave();
 
-      beforeEach(() => {
+      beforeEach(async () => {
+        const sequelize = app.app.get(getConnectionToken());
+        await sequelize.sync({ force: true });
         categoryRepository = app.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );

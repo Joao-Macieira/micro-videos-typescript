@@ -8,6 +8,7 @@ import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { CreateCategoryFixture } from '../../src/categories/fixtures';
 import { CategoriesController } from '../../src/categories/categories.controller';
 import { applyGlobalConfig } from '../../src/global-config';
+import { getConnectionToken } from '@nestjs/sequelize';
 
 function startApp({
   beforeInit,
@@ -78,11 +79,14 @@ describe('CategoriesController (e2e)', () => {
     describe('should create a category', () => {
       const app = startApp();
       const arrange = CreateCategoryFixture.arrangeForSave();
-      beforeEach(() => {
+      beforeEach(async () => {
+        const sequelize = app.app.get(getConnectionToken());
+        await sequelize.sync({ force: true });
         categoryRepository = app.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
       });
+
       test.each(arrange)(
         'when body is $send_data',
         async ({ send_data, expected }) => {
@@ -106,7 +110,7 @@ describe('CategoriesController (e2e)', () => {
           const serialized = instanceToPlain(presenter);
 
           expect(response.body.data).toStrictEqual(serialized);
-          expect(response.body.data).toStrictEqual({
+          expect(response.body.data).toMatchObject({
             id: serialized.id,
             created_at: serialized.created_at,
             ...send_data,

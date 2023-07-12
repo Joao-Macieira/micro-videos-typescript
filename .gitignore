@@ -1,6 +1,7 @@
 .history/
+.devcontainer
+.docker
+__coverage
 node_modules
 tsconfig.tsbuildinfo
-.devcontainer
-__coverage
 dist
