@@ -24,7 +24,10 @@ import {
   CategoryCollectionPresenter,
   CategoryPresenter,
 } from '../../../categories/presenter/category.presenter';
-import { CategoryFixture } from '../../../categories/fixtures';
+import {
+  CategoryFixture,
+  ListCategoriesFixture,
+} from '../../../categories/fixtures';
 
 describe('CategoriesController integration tests', () => {
   let categoriesController: CategoriesController;
@@ -213,124 +216,49 @@ describe('CategoriesController integration tests', () => {
   });
 
   describe('search method', () => {
-    it('should returns categories using query empty ordered by created_at', async () => {
-      const created_at = new Date();
-      const categories = Category.fake()
-        .theCategories(4)
-        .withName((index) => index + '')
-        .withCreatedAt((index) => new Date(created_at.getTime() + index))
-        .build();
+    describe('should returns categories using query empty ordered by created_at', () => {
+      const { entitiesMap, arrange } =
+        ListCategoriesFixture.arrangeIncrementedWithCreatedAt();
 
-      await repository.bulkInsert(categories);
-
-      const arrange = [
-        {
-          send_data: {},
-          expected: {
-            items: [categories[3], categories[2], categories[1], categories[0]],
-            current_page: 1,
-            last_page: 1,
-            per_page: 15,
-            total: 4,
-          },
-        },
-        {
-          send_data: { per_page: 2 },
-          expected: {
-            items: [categories[3], categories[2]],
-            current_page: 1,
-            last_page: 2,
-            per_page: 2,
-            total: 4,
-          },
-        },
-        {
-          send_data: { page: 2, per_page: 2 },
-          expected: {
-            items: [categories[1], categories[0]],
-            current_page: 2,
-            last_page: 2,
-            per_page: 2,
-            total: 4,
-          },
-        },
-      ];
-
-      arrange.forEach(async (item) => {
-        const presenter = await categoriesController.search(item.send_data);
-        expect(presenter).toEqual(
-          new CategoryCollectionPresenter(item.expected),
-        );
+      beforeEach(async () => {
+        await repository.bulkInsert(Object.values(entitiesMap));
       });
+
+      test.each(arrange)(
+        'when send_data is $send_data',
+        async ({ send_data, expected }) => {
+          const presenter = await categoriesController.search(send_data);
+          const { entities, ...paginationProps } = expected;
+          expect(presenter).toEqual(
+            new CategoryCollectionPresenter({
+              items: entities,
+              ...paginationProps.meta,
+            }),
+          );
+        },
+      );
     });
 
-    it('should returns output using pagination, sort and filter', async () => {
-      const faker = Category.fake().aCategory();
-      const categories = [
-        faker.withName('a').build(),
-        faker.withName('AAA').build(),
-        faker.withName('AaA').build(),
-        faker.withName('b').build(),
-        faker.withName('c').build(),
-      ];
+    describe('should returns output using pagination, sort and filter', () => {
+      const { entitiesMap, arrange } = ListCategoriesFixture.arrangeUnsorted();
 
-      await repository.bulkInsert(categories);
-
-      const arrange = [
-        {
-          send_data: {
-            page: 1,
-            per_page: 2,
-            sort: 'name',
-            filter: 'a',
-          },
-          expected: {
-            items: [categories[1], categories[2]],
-            total: 3,
-            current_page: 1,
-            per_page: 2,
-            last_page: 2,
-          },
-        },
-        {
-          send_data: {
-            page: 2,
-            per_page: 2,
-            sort: 'name',
-            filter: 'a',
-          },
-          expected: {
-            items: [categories[0]],
-            total: 3,
-            current_page: 2,
-            per_page: 2,
-            last_page: 2,
-          },
-        },
-        {
-          send_data: {
-            page: 1,
-            per_page: 2,
-            sort: 'name',
-            sort_dir: 'desc' as SortDirection,
-            filter: 'a',
-          },
-          expected: {
-            items: [categories[0], categories[2]],
-            total: 3,
-            current_page: 1,
-            per_page: 2,
-            last_page: 2,
-          },
-        },
-      ];
-
-      arrange.forEach(async (item) => {
-        const presenter = await categoriesController.search(item.send_data);
-        expect(presenter).toEqual(
-          new CategoryCollectionPresenter(item.expected),
-        );
+      beforeEach(async () => {
+        await repository.bulkInsert(Object.values(entitiesMap));
       });
+
+      test.each(arrange)(
+        'when send_data is $send_data',
+        async ({ send_data, expected }) => {
+          const presenter = await categoriesController.search(send_data);
+          const { entities, ...paginationProps } = expected;
+          expect(presenter).toEqual(
+            new CategoryCollectionPresenter({
+              items: entities,
+              ...paginationProps.meta,
+            }),
+          );
+        },
+      );
     });
   });
 });
