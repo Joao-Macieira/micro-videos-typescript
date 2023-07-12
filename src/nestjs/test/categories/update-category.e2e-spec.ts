@@ -14,7 +14,7 @@ describe('CategoriesController (e2e)', () => {
   let categoryRepository: CategoryRepository.Repository;
   const uuid = 'e3e15329-fb1a-4ae4-a06b-7dde81ffa4a3';
 
-  describe('PUT /categories/:id', () => {
+  describe('/categories/:id (PUT)', () => {
     describe('should a response error when id is invalid or not found', () => {
       const nestApp = startApp();
       const faker = Category.fake().aCategory();

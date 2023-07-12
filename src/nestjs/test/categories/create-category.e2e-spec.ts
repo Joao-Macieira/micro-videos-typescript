@@ -10,7 +10,7 @@ import { startApp } from '../../src/@shared/testing/helpers';
 describe('CategoriesController (e2e)', () => {
   let categoryRepository: CategoryRepository.Repository;
 
-  describe('POST /categories', () => {
+  describe('/categories (POST)', () => {
     describe('should a response error with 422 when request body is invalid', () => {
       const app = startApp();
       const invalidRequest = CreateCategoryFixture.arrangeInvalidRequest();
