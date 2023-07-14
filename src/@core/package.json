@@ -13,7 +13,8 @@
     "test": "jest",
     "test:cov": "jest --coverage",
     "cti": "cti",
-    "cti:make": "sh ./cti.sh"
+    "cti:make": "sh ./cti.sh",
+    "migrate": "node -r ts-node/register/transpile-only ./src/@seedwork/infra/db/sequelize/migrator-cli.ts" 
   },
   "keywords": [],
   "author": "",
@@ -75,6 +76,7 @@
     "sequelize": "^6.19.0",
     "sequelize-typescript": "^2.1.3",
     "sqlite3": "^5.0.8",
+    "umzug": "^3.2.1",
     "uuid": "^9.0.0"
   }
 }
