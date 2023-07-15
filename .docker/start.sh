@@ -21,7 +21,7 @@ fi
 npm install
 
 echo "###### Building @core ######"
-npm run build -w @fc/micro-videos
+npm run build -w @core/micro-videos
 
 tail -f /dev/null
 
