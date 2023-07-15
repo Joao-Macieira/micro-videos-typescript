@@ -14,7 +14,7 @@
     "test:cov": "jest --coverage",
     "cti": "cti",
     "cti:make": "sh ./cti.sh",
-    "migrate": "node -r ts-node/register/transpile-only ./src/@seedwork/infra/db/sequelize/migrator-cli.ts" 
+    "migrate": "node -r ts-node/register/transpile-only ./src/@seedwork/infra/db/sequelize/migrator-cli.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,7 @@
   "exports": {
     "./@seedwork/application": "./dist/@seedwork/application/index.js",
     "./@seedwork/domain": "./dist/@seedwork/domain/index.js",
+    "./@seedwork/infra": "./dist/@seedwork/infra/index.js",
     "./category/application": "./dist/category/application/index.js",
     "./category/domain": "./dist/category/domain/index.js",
     "./category/infra": "./dist/category/infra/index.js"
