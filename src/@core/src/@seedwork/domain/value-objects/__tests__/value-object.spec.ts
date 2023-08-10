@@ -2,6 +2,8 @@ import ValueObject from "../value-objects";
 
 class StubValueObject extends ValueObject {}
 
+class SecondStubValueObject extends ValueObject {}
+
 describe("Value objects ubit tests", () => {
   it("should set value", () => {
     let vo = new StubValueObject('string value');
@@ -9,6 +11,35 @@ describe("Value objects ubit tests", () => {
 
     vo = new StubValueObject({ props1: 'value1' });
     expect(vo.value).toStrictEqual({ props1: 'value1' });
+  });
+
+  describe('should verify if is equal', () => {
+    const arrange = [
+      {
+        vo1: new StubValueObject('vo1'),
+        vo2: undefined,
+        expected: false,
+      },
+      {
+        vo1: new StubValueObject('vo1'),
+        vo2: null,
+        expected: false,
+      },
+      {
+        vo1: new StubValueObject('vo1'),
+        vo2: new SecondStubValueObject('vo1'),
+        expected: false,
+      },
+      {
+        vo1: new StubValueObject('vo1'),
+        vo2: new StubValueObject('vo1'),
+        expected: true,
+      },
+    ]
+
+    test.each(arrange)("from $vo1 and $vo2 to $expected", ({vo1, vo2, expected}) => {
+      expect(vo1.equals(vo2)).toBe(expected);
+    });
   });
 
   describe("sould convert to string", () => {

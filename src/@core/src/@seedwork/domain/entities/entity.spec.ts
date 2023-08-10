@@ -3,7 +3,15 @@ import { validate as uuidValidate } from 'uuid';
 import UniqueEntityId from "../value-objects/unique-entity-id.value-object";
 import Entity from "./entity";
 
-class StubEntity extends Entity<{ prop1: string; prop2: number }> {}
+class StubEntity extends Entity<{ prop1: string; prop2: number }> {  
+  toJSON(): Required<{ id: string; } & { prop1: string; prop2: number; }> {
+    return {
+      id: this.id,
+      prop1: this.props.prop1,
+      prop2: this.props.prop2,
+    };
+  }
+}
 
 describe("Entity unit tests", () => {
   it("should set props and id", () => {

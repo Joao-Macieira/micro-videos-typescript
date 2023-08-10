@@ -24,7 +24,7 @@ export type Output = PaginationOutputDto<CategoryOutput>;
 
     private toOutput(searchResult: CategoryRepository.SearchResult): Output {
       const items = searchResult.items.map(item => CategoryOutputMapper.toOutput(item));
-      const pagination = PaginationOutputMapper.toOutput(searchResult);
+      const pagination = PaginationOutputMapper.toOutput(items, searchResult);
 
       return {
         items,

@@ -9,8 +9,12 @@ export type PaginationOutputDto<Items = any> = {
 }
 
 export class PaginationOutputMapper {
-  static toOutput(result: SearchResult): Omit<PaginationOutputDto, "items"> {
+  static toOutput<Item = any>(
+    items: Item[],
+    result: Omit<SearchResult, "items">
+  ): PaginationOutputDto<Item> {
     return {
+      items,
       total: result.total,
       current_page: result.current_page,
       last_page: result.last_page,

@@ -10,10 +10,7 @@ export namespace CategoryRepository {
 
   export class SearchParams extends DefaultSearchParams<Filter> {}
 
-  export class SearchResult extends DefaultSearchResult<
-    Category,
-    Filter
-  > {}
+  export class SearchResult extends DefaultSearchResult<Category, Filter> {}
 
   export interface Repository
     extends SearchableRepositoryInterface<

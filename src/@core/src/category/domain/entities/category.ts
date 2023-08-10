@@ -11,7 +11,9 @@ export interface CategoryProps {
   created_at?: Date;
 }
 
-export class Category extends Entity<CategoryProps> {
+export type CategoryPropsJson = Required<{ id: string } & CategoryProps>;
+
+export class Category extends Entity<CategoryProps, CategoryPropsJson> {
   constructor(public readonly props: CategoryProps, id?: UniqueEntityId) {
     Category.validate(props);
     super(props, id);
@@ -70,5 +72,15 @@ export class Category extends Entity<CategoryProps> {
 
   static fake() {
     return CategoryFakeBuilder;
+  }
+
+  toJSON(): CategoryPropsJson {
+    return {
+      id: this.id.toString(),
+      name: this.name,
+      description: this.description,
+      is_active: this.is_active,
+      created_at: this.created_at,
+    }
   }
 }

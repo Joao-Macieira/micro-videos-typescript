@@ -124,6 +124,9 @@ describe('UpdateCategoryUseCase integration tests', () => {
     for (const item of arrange) {
       output = await useCase.execute(item.input);
       expect(output).toStrictEqual(item.expected);
+
+      const entityUpdated = await repository.findById(item.input.id);
+      expect(entityUpdated.toJSON()).toStrictEqual(item.expected);
     }
   });
 });

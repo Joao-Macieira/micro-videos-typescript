@@ -36,4 +36,9 @@ describe('object unit tests', () => {
     const num = deepFreeze(5);
     expect(typeof num).toBe('number');
   });
+
+  it('should return passed value when this vlaue cant be freeze', () => {
+    const nullFreezer = deepFreeze(null);
+    expect(nullFreezer).toBeNull();
+  });
 });

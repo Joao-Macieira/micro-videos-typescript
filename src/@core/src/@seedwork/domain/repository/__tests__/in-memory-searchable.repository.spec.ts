@@ -7,7 +7,15 @@ type StubEntitiesProps = {
   price: number;
 };
 
-class StubEntity extends Entity<StubEntitiesProps> {}
+class StubEntity extends Entity<StubEntitiesProps> {
+  toJSON(): Required<{ id: string; } & StubEntitiesProps> {
+    return {
+      id: this.id,
+      name: this.props.name,
+      price: this.props.price,
+    };
+  }
+}
 
 class StubInMemorySearchableRepository extends InMemorySearchableRepository<StubEntity> {
   sortableFields: string[] = ["name"];

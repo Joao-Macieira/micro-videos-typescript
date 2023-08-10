@@ -52,16 +52,16 @@ export abstract class InMemoryRepository<E extends Entity>
   }
 }
 
-export abstract class InMemorySearchableRepository<E extends Entity>
+export abstract class InMemorySearchableRepository<E extends Entity, Filter = string>
   extends InMemoryRepository<E>
-  implements SearchableRepositoryInterface<E>
+  implements SearchableRepositoryInterface<E, Filter>
 {
   bulkInsert(entities: E[]): Promise<void> {
     throw new Error("Method not implemented.");
   }
   sortableFields: string[] = [];
 
-  async search(props: SearchParams): Promise<SearchResult<E>> {
+  async search(props: SearchParams<Filter>): Promise<SearchResult<E, Filter>> {
     const itemsFiltered = await this.applyFilter(this.items, props.filter);
     const itemsSorted = await this.applySort(
       itemsFiltered,
@@ -84,7 +84,7 @@ export abstract class InMemorySearchableRepository<E extends Entity>
 
   protected abstract applyFilter(
     items: E[],
-    filter: string | null
+    filter: Filter | null
   ): Promise<E[]>;
 
   protected async applySort(
