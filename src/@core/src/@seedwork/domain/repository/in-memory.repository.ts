@@ -56,9 +56,6 @@ export abstract class InMemorySearchableRepository<E extends Entity, Filter = st
   extends InMemoryRepository<E>
   implements SearchableRepositoryInterface<E, Filter>
 {
-  bulkInsert(entities: E[]): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
   sortableFields: string[] = [];
 
   async search(props: SearchParams<Filter>): Promise<SearchResult<E, Filter>> {
