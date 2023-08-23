@@ -9,6 +9,7 @@ import {
   Query,
   ParseUUIDPipe,
   Put,
+  HttpCode,
 } from '@nestjs/common';
 
 import { CreateCastMemberDto } from './dto/create-cast-member.dto';
@@ -77,6 +78,7 @@ export class CastMembersController {
     return CastMembersController.castMemberToResponse(output);
   }
 
+  @HttpCode(204)
   @Delete(':id')
   remove(
     @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
