@@ -1,34 +1,90 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { CastMembersService } from './cast-members.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Inject,
+  Query,
+  ParseUUIDPipe,
+  Put,
+} from '@nestjs/common';
+
 import { CreateCastMemberDto } from './dto/create-cast-member.dto';
 import { UpdateCastMemberDto } from './dto/update-cast-member.dto';
+import {
+  CastMemberOutput,
+  CreateCastMemberUseCase,
+  DeleteCastMemberUseCase,
+  GetCastMemberUseCase,
+  ListCastMemberUseCase,
+  UpdateCastMemberUseCase,
+} from '@core/micro-videos/cast-member/application';
+import {
+  CastMemberCollectionPresenter,
+  CastMemberPresenter,
+} from './presenter/cast-member.presenter';
+import { SearchCastMemberDto } from './dto/search-cast-member.dto';
 
 @Controller('cast-members')
 export class CastMembersController {
-  constructor(private readonly castMembersService: CastMembersService) {}
+  @Inject(CreateCastMemberUseCase.UseCase)
+  private createUseCase: CreateCastMemberUseCase.UseCase;
+
+  @Inject(UpdateCastMemberUseCase.UseCase)
+  private updateUseCase: UpdateCastMemberUseCase.UseCase;
+
+  @Inject(DeleteCastMemberUseCase.UseCase)
+  private deleteUseCase: DeleteCastMemberUseCase.UseCase;
+
+  @Inject(GetCastMemberUseCase.UseCase)
+  private getUseCase: GetCastMemberUseCase.UseCase;
+
+  @Inject(ListCastMemberUseCase.UseCase)
+  private listUseCase: ListCastMemberUseCase.UseCase;
 
   @Post()
-  create(@Body() createCastMemberDto: CreateCastMemberDto) {
-    return this.castMembersService.create(createCastMemberDto);
+  async create(@Body() createCastMemberDto: CreateCastMemberDto) {
+    const output = await this.createUseCase.execute(createCastMemberDto);
+    return CastMembersController.castMemberToResponse(output);
   }
 
   @Get()
-  findAll() {
-    return this.castMembersService.findAll();
+  async search(@Query() searchParams: SearchCastMemberDto) {
+    const output = await this.listUseCase.execute(searchParams);
+    return new CastMemberCollectionPresenter(output);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.castMembersService.findOne(+id);
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+  ) {
+    const output = await this.getUseCase.execute({ id });
+    return CastMembersController.castMemberToResponse(output);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCastMemberDto: UpdateCastMemberDto) {
-    return this.castMembersService.update(+id, updateCastMemberDto);
+  @Put(':id')
+  async update(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+    @Body() updateCastMemberDto: UpdateCastMemberDto,
+  ) {
+    const output = await this.updateUseCase.execute({
+      id,
+      ...updateCastMemberDto,
+    });
+
+    return CastMembersController.castMemberToResponse(output);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.castMembersService.remove(+id);
+  remove(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422 })) id: string,
+  ) {
+    return this.deleteUseCase.execute({ id });
+  }
+
+  static castMemberToResponse(output: CastMemberOutput) {
+    return new CastMemberPresenter(output);
   }
 }
