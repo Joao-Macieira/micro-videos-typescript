@@ -1,3 +1,6 @@
+const core_micro_videos_path =
+  '<rootDir>/../../node_modules/@core/micro-videos/dist';
+
 export default {
   displayName: {
     name: 'nestjs',
@@ -13,12 +16,10 @@ export default {
   coverageDirectory: '../__coverage',
   testEnvironment: 'node',
   moduleNameMapper: {
-    '@core/micro\\-videos/(.*)$':
-      '<rootDir>/../../node_modules/@core/micro-videos/dist/$1',
-    '#seedwork/(.*)$':
-       '<rootDir>/../../node_modules/@core/micro-videos/dist/@seedwork/$1',
-     '#category/(.*)$':
-       '<rootDir>/../../node_modules/@core/micro-videos/dist/category/$1',
+    '@core/micro\\-videos/(.*)$': `${core_micro_videos_path}/$1`,
+    '#seedwork/(.*)$': `${core_micro_videos_path}/@seedwork/$1`,
+    '#category/(.*)$': `${core_micro_videos_path}/category/$1`,
+    '#cast-member/(.*)$': `${core_micro_videos_path}/cast-member/$1`,
   },
   setupFilesAfterEnv: ['../@core/src/@seedwork/domain/tests/jest.ts'],
   coverageThreshold: {
