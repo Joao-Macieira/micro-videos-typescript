@@ -3,13 +3,17 @@ import { ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { CategorySequelize } from '@core/micro-videos/category/infra';
 import { CONFIG_SCHEMA_TYPE } from 'src/config/config.module';
+import { CastMemberSequelize } from '@core/micro-videos/cast-member/infra';
+
+const models = [
+  CategorySequelize.CategoryModel,
+  CastMemberSequelize.CastMemberModel,
+];
 
 @Module({
   imports: [
     SequelizeModule.forRootAsync({
       useFactory: async (configService: ConfigService<CONFIG_SCHEMA_TYPE>) => {
-        const models = [CategorySequelize.CategoryModel];
-
         if (configService.get('DB_VENDOR') === 'sqlite') {
           return {
             dialect: 'sqlite',
