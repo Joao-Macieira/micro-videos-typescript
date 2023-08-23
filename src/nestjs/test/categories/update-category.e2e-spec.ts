@@ -1,5 +1,4 @@
 import request from 'supertest';
-import { getConnectionToken } from '@nestjs/sequelize';
 import { instanceToPlain } from 'class-transformer';
 import {
   Category,
@@ -105,8 +104,6 @@ describe('CategoriesController (e2e)', () => {
       const arrange = UpdateCategoryFixture.arrangeForSave();
 
       beforeEach(async () => {
-        const sequelize = app.app.get(getConnectionToken());
-        await sequelize.sync({ force: true });
         categoryRepository = app.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
