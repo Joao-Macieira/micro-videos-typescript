@@ -7,11 +7,13 @@ import { Reflector } from '@nestjs/core';
 import { WrapperDataInterceptor } from './@shared/interceptors/wrapper-data/wrapper-data.interceptor';
 import { EntityValidationErrorFilter } from './@shared/exception-filters/entity-validation-error/entity-validation-error.filter';
 import { NotFoundErrorFilter } from './@shared/exception-filters/not-found-error/not-found-error.filter';
+import { SearchValidationErrorFilter } from './@shared/exception-filters/search-validation-error/search-validation-error.filter';
 
 export function applyGlobalConfig(app: INestApplication) {
   app.useGlobalPipes(
     new ValidationPipe({
       errorHttpStatusCode: 422,
+      transform: true,
     }),
   );
   app.useGlobalInterceptors(
@@ -21,5 +23,6 @@ export function applyGlobalConfig(app: INestApplication) {
   app.useGlobalFilters(
     new EntityValidationErrorFilter(),
     new NotFoundErrorFilter(),
+    new SearchValidationErrorFilter(),
   );
 }
