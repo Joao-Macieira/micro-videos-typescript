@@ -13,10 +13,12 @@ export interface CategoryProps {
 
 export type CategoryPropsJson = Required<{ id: string } & CategoryProps>;
 
-export class Category extends AggregateRoot<UniqueEntityId,CategoryProps, CategoryPropsJson> {
-  constructor(public readonly props: CategoryProps, entityId?: UniqueEntityId) {
+export class CategoryId extends UniqueEntityId {}
+
+export class Category extends AggregateRoot<CategoryId,CategoryProps, CategoryPropsJson> {
+  constructor(public readonly props: CategoryProps, entityId?: CategoryId) {
     Category.validate(props);
-    super(props, entityId ?? new UniqueEntityId());
+    super(props, entityId ?? new CategoryId());
     this.description = this.props.description;
     this.is_active = this.props.is_active;
     this.props.created_at = this.props.created_at ?? new Date();

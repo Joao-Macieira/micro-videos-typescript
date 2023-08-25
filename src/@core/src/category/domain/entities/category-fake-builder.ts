@@ -1,7 +1,6 @@
 import { Chance } from "chance";
 
-import { Category } from "./category";
-import { UniqueEntityId } from "#seedwork/domain";
+import { Category, CategoryId } from "./category";
 
 type PropOrFactory<T> = T | ((index: number) => T);
 
@@ -9,7 +8,7 @@ export class CategoryFakeBuilder<TBuild = any> {
   private chance: Chance.Chance;
 
   // auto generated in entity
-  private _unique_entity_id = undefined;
+  private _entity_id = undefined;
 
   private _name: PropOrFactory<string> = (_index) => this.chance.word();
 
@@ -36,8 +35,8 @@ export class CategoryFakeBuilder<TBuild = any> {
     return new CategoryFakeBuilder<Category[]>(countObjs);
   }
 
-  withUniqueEntityId(valueOrFactory: PropOrFactory<UniqueEntityId>) {
-    this._unique_entity_id = valueOrFactory;
+  withUniqueEntityId(valueOrFactory: PropOrFactory<CategoryId>) {
+    this._entity_id = valueOrFactory;
     return this;
   }
 
@@ -108,17 +107,17 @@ export class CategoryFakeBuilder<TBuild = any> {
               created_at: this.callFactory(this._created_at, index),
             }),
           },
-          !this._unique_entity_id
+          !this._entity_id
             ? undefined
-            : this.callFactory(this._unique_entity_id, index)
+            : this.callFactory(this._entity_id, index)
         )
     );
 
     return this.countObjs === 1 ? (categories[0] as any) : categories;
   }
 
-  get unique_entity_id() {
-    return this.getValue("unique_entity_id");
+  get entity_id() {
+    return this.getValue("entity_id");
   }
 
   get name() {
