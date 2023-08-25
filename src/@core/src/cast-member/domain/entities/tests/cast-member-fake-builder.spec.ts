@@ -1,6 +1,7 @@
 import { CastMemberFakeBuilder } from "../cast-member-fake-builder";
 import { Chance } from "chance";
 import { CastMemberType, Types } from "../../value-objects";
+import { CastMemberId } from "../cast-member";
 
 describe("CastMemberFakerBuilder Unit Tests", () => {
   it("create cast member types", () => {
@@ -32,32 +33,31 @@ describe("CastMemberFakerBuilder Unit Tests", () => {
       expect(faker["_entity_id"]).toBeUndefined();
     });
 
-    // test("withEntityId", () => {
-    //   const castMemberId = new CastMemberId();
-    //   const $this = faker.withEntityId(castMemberId);
-    //   expect($this).toBeInstanceOf(CastMemberFakeBuilder);
-    //   expect(faker["_entity_id"]).toBe(castMemberId);
+    test("withEntityId", () => {
+      const castMemberId = new CastMemberId();
+      const $this = faker.withEntityId(castMemberId);
+      expect($this).toBeInstanceOf(CastMemberFakeBuilder);
+      expect(faker["_entity_id"]).toBe(castMemberId);
 
-    //   faker.withEntityId(() => castMemberId);
-    //   expect(faker["_entity_id"]()).toBe(castMemberId);
-    //   console.log(faker.entity_id);
-    //   expect(faker.entity_id).toBe(castMemberId);
-    // });
+      faker.withEntityId(() => castMemberId);
+      expect(faker["_entity_id"]()).toBe(castMemberId);
+      expect(faker.entity_id).toBe(castMemberId);
+    });
 
-    // it("should pass index to unique_entity_id factory", () => {
-    //   let mockFactory = jest.fn().mockReturnValue(new CastMemberId());
-    //   faker.withEntityId(mockFactory);
-    //   faker.build();
-    //   expect(mockFactory).toHaveBeenCalledWith(0);
+    it("should pass index to unique_entity_id factory", () => {
+      let mockFactory = jest.fn().mockReturnValue(new CastMemberId());
+      faker.withEntityId(mockFactory);
+      faker.build();
+      expect(mockFactory).toHaveBeenCalledWith(0);
 
-    //   mockFactory = jest.fn().mockReturnValue(new CastMemberId());
-    //   const fakerMany = CastMemberFakeBuilder.theCastMembers(2);
-    //   fakerMany.withEntityId(mockFactory);
-    //   fakerMany.build();
+      mockFactory = jest.fn().mockReturnValue(new CastMemberId());
+      const fakerMany = CastMemberFakeBuilder.theCastMembers(2);
+      fakerMany.withEntityId(mockFactory);
+      fakerMany.build();
 
-    //   expect(mockFactory).toHaveBeenCalledWith(0);
-    //   expect(mockFactory).toHaveBeenCalledWith(1);
-    // });
+      expect(mockFactory).toHaveBeenCalledWith(0);
+      expect(mockFactory).toHaveBeenCalledWith(1);
+    });
   });
 
   describe("name prop", () => {
@@ -183,57 +183,57 @@ describe("CastMemberFakerBuilder Unit Tests", () => {
     });
   });
 
-  // it("should create a cast member", () => {
-  //   const faker = CastMemberFakeBuilder.anActor();
-  //   let castMember = faker.build();
+  it("should create a cast member", () => {
+    const faker = CastMemberFakeBuilder.anActor();
+    let castMember = faker.build();
 
-  //   expect(castMember.entityId).toBeInstanceOf(CastMemberId);
-  //   expect(typeof castMember.name === "string").toBeTruthy();
-  //   expect(castMember.type).toBeInstanceOf(CastMemberType);
-  //   expect(castMember.created_at).toBeInstanceOf(Date);
+    expect(castMember.entityId).toBeInstanceOf(CastMemberId);
+    expect(typeof castMember.name === "string").toBeTruthy();
+    expect(castMember.type).toBeInstanceOf(CastMemberType);
+    expect(castMember.created_at).toBeInstanceOf(Date);
 
-  //   const created_at = new Date();
-  //   const actor = CastMemberType.createAnActor();
-  //   const castMemberId = new CastMemberId();
-  //   castMember = faker
-  //     .withEntityId(castMemberId)
-  //     .withName("name test")
-  //     .withType(actor)
-  //     .withCreatedAt(created_at)
-  //     .build();
+    const created_at = new Date();
+    const actor = CastMemberType.createAnActor();
+    const castMemberId = new CastMemberId();
+    castMember = faker
+      .withEntityId(castMemberId)
+      .withName("name test")
+      .withType(actor)
+      .withCreatedAt(created_at)
+      .build();
 
-  //   expect(castMember.entityId.value).toBe(castMemberId.value);
-  //   expect(castMember.name).toBe("name test");
-  //   expect(castMember.type).toEqual(actor);
-  //   expect(castMember.props.created_at).toEqual(created_at);
-  // });
+    expect(castMember.entityId).toBe(castMemberId);
+    expect(castMember.name).toBe("name test");
+    expect(castMember.type).toEqual(actor);
+    expect(castMember.props.created_at).toEqual(created_at);
+  });
 
-  // it("should create many cast members", () => {
-  //   const faker = CastMemberFakeBuilder.theCastMembers(2);
-  //   let castMembers = faker.build();
+  it("should create many cast members", () => {
+    const faker = CastMemberFakeBuilder.theCastMembers(2);
+    let castMembers = faker.build();
 
-  //   castMembers.forEach((castMember) => {
-  //     expect(castMember.entityId).toBeInstanceOf(CastMemberId);
-  //     expect(typeof castMember.name === "string").toBeTruthy();
-  //     expect(castMember.type).toBeInstanceOf(CastMemberType);
-  //     expect(castMember.created_at).toBeInstanceOf(Date);
-  //   });
+    castMembers.forEach((castMember) => {
+      expect(castMember.entityId).toBeInstanceOf(CastMemberId);
+      expect(typeof castMember.name === "string").toBeTruthy();
+      expect(castMember.type).toBeInstanceOf(CastMemberType);
+      expect(castMember.created_at).toBeInstanceOf(Date);
+    });
 
-  //   const created_at = new Date();
-  //   const actor = CastMemberType.createAnActor();
-  //   const castMemberId = new CastMemberId();
-  //   castMembers = faker
-  //     .withEntityId(castMemberId)
-  //     .withName("name test")
-  //     .withType(actor)
-  //     .withCreatedAt(created_at)
-  //     .build();
+    const created_at = new Date();
+    const actor = CastMemberType.createAnActor();
+    const castMemberId = new CastMemberId();
+    castMembers = faker
+      .withEntityId(castMemberId)
+      .withName("name test")
+      .withType(actor)
+      .withCreatedAt(created_at)
+      .build();
 
-  //   castMembers.forEach((castMember) => {
-  //     expect(castMember.entityId.value).toBe(castMemberId.value);
-  //     expect(castMember.name).toBe("name test");
-  //     expect(castMember.type).toBeInstanceOf(CastMemberType);
-  //     expect(castMember.props.created_at).toEqual(created_at);
-  //   });
-  // });
+    castMembers.forEach((castMember) => {
+      expect(castMember.entityId.value).toBe(castMemberId.value);
+      expect(castMember.name).toBe("name test");
+      expect(castMember.type).toBeInstanceOf(CastMemberType);
+      expect(castMember.props.created_at).toEqual(created_at);
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import { CastMember } from "./cast-member";
+import { CastMember, CastMemberId } from "./cast-member";
 import { Chance } from "chance";
 import { CastMemberType } from "../value-objects/cast-member-type.vo";
 
@@ -51,7 +51,7 @@ export class CastMemberFakeBuilder<TBuild = any> {
     this.chance = Chance();
   }
 
-  withEntityId(valueOrFactory: PropOrFactory<string>) {
+  withEntityId(valueOrFactory: PropOrFactory<CastMemberId>) {
     this._entity_id = valueOrFactory;
     return this;
   }

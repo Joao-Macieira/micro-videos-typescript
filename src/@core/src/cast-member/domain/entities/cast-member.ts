@@ -12,9 +12,11 @@ export interface CastMembersProps {
 
 export type CastMembersPropsJson = Required<{ id: string } & Omit<CastMembersProps, "types">> & { type: Types };
 
-export class CastMember extends AggregateRoot<UniqueEntityId, CastMembersProps, CastMembersPropsJson> {
-  constructor(public readonly props: CastMembersProps, entityId?: UniqueEntityId) {
-    super(props, entityId ?? new UniqueEntityId());
+export class CastMemberId extends UniqueEntityId {}
+
+export class CastMember extends AggregateRoot<CastMemberId, CastMembersProps, CastMembersPropsJson> {
+  constructor(public readonly props: CastMembersProps, entityId?: CastMemberId) {
+    super(props, entityId ?? new CastMemberId());
     CastMember.validate(props);
     this.props.created_at = this.props.created_at ?? new Date();
   }
