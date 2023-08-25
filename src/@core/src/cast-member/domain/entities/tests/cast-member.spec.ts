@@ -20,7 +20,7 @@ describe("CastMember Unit Tests", () => {
     });
     expect(castMember.props.created_at).toBeInstanceOf(Date);
 
-    let created_at = new Date(); //string
+    let created_at = new Date();
     castMember = new CastMember({
       name: "test",
       type: director,

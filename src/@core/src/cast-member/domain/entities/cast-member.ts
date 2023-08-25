@@ -11,9 +11,9 @@ export interface CastMembersProps {
 
 export type CastMembersPropsJson = Required<{ id: string } & Omit<CastMembersProps, "types">> & { type: Types };
 
-export class CastMember extends Entity<CastMembersProps, CastMembersPropsJson> {
-  constructor(public readonly props: CastMembersProps, id?: UniqueEntityId) {
-    super(props, id);
+export class CastMember extends Entity<UniqueEntityId, CastMembersProps, CastMembersPropsJson> {
+  constructor(public readonly props: CastMembersProps, entityId?: UniqueEntityId) {
+    super(props, entityId ?? new UniqueEntityId());
     CastMember.validate(props);
     this.props.created_at = this.props.created_at ?? new Date();
   }
