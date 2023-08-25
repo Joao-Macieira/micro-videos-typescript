@@ -1,13 +1,15 @@
+import AggregateRoot from "../entities/aggregate-root";
 import Entity from "../entities/entity";
+import { ValueObject } from "../value-objects";
 import UniqueEntityId from "../value-objects/unique-entity-id.value-object";
 
-export interface RepositoryInterface<E extends Entity> {
+export interface RepositoryInterface<E extends AggregateRoot, EntityId extends ValueObject> {
   insert(entity: E): Promise<void>;
   bulkInsert(entities: E[]): Promise<void>;
-  findById(id: string | UniqueEntityId): Promise<E>;
+  findById(id: string | EntityId): Promise<E>;
   findAll(): Promise<E[]>;
   update(entity: E): Promise<void>;
-  delete(id: string | UniqueEntityId): Promise<void>;
+  delete(id: string | EntityId): Promise<void>;
 }
 
 export type SortDirection = "asc" | "desc";
@@ -147,10 +149,11 @@ export class SearchResult<E extends Entity = Entity, Filter = string> {
 
 export interface SearchableRepositoryInterface<
   E extends Entity,
+  EntityId extends ValueObject,
   Filter = string,
   SearchInput = SearchParams<Filter>,
   SearchOutput = SearchResult<E, Filter>
-> extends RepositoryInterface<E> {
+> extends RepositoryInterface<E, EntityId> {
   sortableFields: string[];
   search(props: SearchInput): Promise<SearchOutput>;
 }

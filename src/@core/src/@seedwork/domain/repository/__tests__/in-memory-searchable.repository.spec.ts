@@ -22,7 +22,7 @@ class StubEntity extends Entity<UniqueEntityId ,StubEntitiesProps> {
   }
 }
 
-class StubInMemorySearchableRepository extends InMemorySearchableRepository<StubEntity> {
+class StubInMemorySearchableRepository extends InMemorySearchableRepository<StubEntity, UniqueEntityId> {
   sortableFields: string[] = ["name"];
 
   protected async applyFilter(

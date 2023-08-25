@@ -1,10 +1,11 @@
 import { InMemorySearchableRepository, SortDirection } from "#seedwork/domain";
-import { CastMember } from "cast-member/domain/entities/cast-member";
+import { CastMember, CastMemberId } from "cast-member/domain/entities/cast-member";
 import CastMemberRepository from "cast-member/domain/repository/cast-member.repository";
 
 // @ts-ignore
 export class CastMemberInMemoryRepository extends InMemorySearchableRepository<
   CastMember,
+  CastMemberId,
   CastMemberRepository.Filter
 > implements CastMemberRepository.Repository {
   sortableFields: string[] = ["name", "created_at"];

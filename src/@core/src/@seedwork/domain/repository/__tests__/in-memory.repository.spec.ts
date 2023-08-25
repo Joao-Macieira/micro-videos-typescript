@@ -22,7 +22,7 @@ class StubEntity extends Entity<UniqueEntityId, StubEntityProps> {
   }
 }
 
-class StubInMemoryRepository extends InMemoryRepository<StubEntity> {}
+class StubInMemoryRepository extends InMemoryRepository<StubEntity, UniqueEntityId> {}
 
 describe("InMemoryRepository unit tests", () => {
   let repository: StubInMemoryRepository;

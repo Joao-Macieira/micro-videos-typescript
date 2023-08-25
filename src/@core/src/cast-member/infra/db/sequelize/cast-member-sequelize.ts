@@ -1,5 +1,5 @@
-import { EntityValidationError, LoadEntityError, NotFoundError, SortDirection, UniqueEntityId } from "#seedwork/domain";
-import { CastMember, CastMemberType, Types } from "../../../domain";
+import { EntityValidationError, LoadEntityError, NotFoundError, SortDirection } from "#seedwork/domain";
+import { CastMember, CastMemberId, CastMemberType, Types } from "../../../domain";
 import {CastMemberRepository as CastMemberRepositoryContract} from "../../../domain/repository";
 import { Op, literal } from "sequelize";
 import { Column, DataType, Model, PrimaryKey, Table } from "sequelize-typescript";
@@ -84,7 +84,7 @@ export namespace CastMemberSequelize {
       await this.castMemberModel.bulkCreate(entities.map(entity => entity.toJSON()));
     }
 
-    async findById(id: string | UniqueEntityId): Promise<CastMember> {
+    async findById(id: string | CastMemberId): Promise<CastMember> {
       const _id = `${id}`;
       const model = await this._get(_id);
       return CastMemberModelMapper.toEntity(model);
@@ -102,7 +102,7 @@ export namespace CastMemberSequelize {
       });
     }
 
-    async delete(id: string | UniqueEntityId): Promise<void> {
+    async delete(id: string | CastMemberId): Promise<void> {
       const _id = `${id}`;
       await this._get(_id);
       this.castMemberModel.destroy({ where: { id: _id }});
@@ -135,7 +135,7 @@ export namespace CastMemberSequelize {
         return new CastMember({
           ...otherData,
           type
-        }, new UniqueEntityId(id))
+        }, new CastMemberId(id))
       } catch (error) {
         if (error instanceof EntityValidationError) {
           error.setFromError("type", errorCastMemberType);

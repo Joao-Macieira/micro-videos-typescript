@@ -1,6 +1,6 @@
 import Entity from "../entities/entity";
 import NotFoundError from "../errors/not-found.error";
-import uniqueEntityId from "../value-objects/unique-entity-id.value-object";
+import { ValueObject } from "../value-objects";
 import {
   RepositoryInterface,
   SearchableRepositoryInterface,
@@ -9,8 +9,8 @@ import {
   SortDirection,
 } from "./repository.contracts";
 
-export abstract class InMemoryRepository<E extends Entity>
-  implements RepositoryInterface<E>
+export abstract class InMemoryRepository<E extends Entity, EntityId extends ValueObject>
+  implements RepositoryInterface<E, EntityId>
 {
   items: E[] = [];
 
@@ -22,7 +22,7 @@ export abstract class InMemoryRepository<E extends Entity>
     this.items.push(...entities);
   }
 
-  async findById(id: string | uniqueEntityId): Promise<E> {
+  async findById(id: string | EntityId): Promise<E> {
     return this._get(`${id}`);
   }
 
@@ -36,7 +36,7 @@ export abstract class InMemoryRepository<E extends Entity>
     this.items[index] = entity;
   }
 
-  async delete(id: string | uniqueEntityId): Promise<void> {
+  async delete(id: string | EntityId): Promise<void> {
     const _id = `${id}`;
     await this._get(_id);
     const index = this.items.findIndex((item) => item.id === _id);
@@ -52,9 +52,9 @@ export abstract class InMemoryRepository<E extends Entity>
   }
 }
 
-export abstract class InMemorySearchableRepository<E extends Entity, Filter = string>
-  extends InMemoryRepository<E>
-  implements SearchableRepositoryInterface<E, Filter>
+export abstract class InMemorySearchableRepository<E extends Entity, EntityId extends ValueObject,Filter = string>
+  extends InMemoryRepository<E, EntityId>
+  implements SearchableRepositoryInterface<E, EntityId, Filter>
 {
   sortableFields: string[] = [];
 
