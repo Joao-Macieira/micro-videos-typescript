@@ -1,4 +1,5 @@
-import { Entity, EntityValidationError, UniqueEntityId } from "#seedwork/domain";
+import { EntityValidationError, UniqueEntityId } from "#seedwork/domain";
+import AggregateRoot from "#seedwork/domain/entities/aggregate-root";
 import CastMemberValidatorFactory from "../validators/cast-member.validator";
 import { Types, CastMemberType } from "../value-objects/cast-member-type.vo";
 import { CastMemberFakeBuilder } from "./cast-member-fake-builder";
@@ -11,7 +12,7 @@ export interface CastMembersProps {
 
 export type CastMembersPropsJson = Required<{ id: string } & Omit<CastMembersProps, "types">> & { type: Types };
 
-export class CastMember extends Entity<UniqueEntityId, CastMembersProps, CastMembersPropsJson> {
+export class CastMember extends AggregateRoot<UniqueEntityId, CastMembersProps, CastMembersPropsJson> {
   constructor(public readonly props: CastMembersProps, entityId?: UniqueEntityId) {
     super(props, entityId ?? new UniqueEntityId());
     CastMember.validate(props);

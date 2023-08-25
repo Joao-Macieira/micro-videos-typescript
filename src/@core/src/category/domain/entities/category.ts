@@ -1,8 +1,8 @@
-import Entity from "#seedwork/domain/entities/entity";
 import UniqueEntityId from "#seedwork/domain/value-objects/unique-entity-id.value-object";
 import { EntityValidationError } from "#seedwork/domain/errors/validation-error";
 import CategoryValidatorFactory from "../validators/category.validator";
 import { CategoryFakeBuilder } from "./category-fake-builder";
+import AggregateRoot from "#seedwork/domain/entities/aggregate-root";
 
 export interface CategoryProps {
   name: string;
@@ -13,7 +13,7 @@ export interface CategoryProps {
 
 export type CategoryPropsJson = Required<{ id: string } & CategoryProps>;
 
-export class Category extends Entity<UniqueEntityId,CategoryProps, CategoryPropsJson> {
+export class Category extends AggregateRoot<UniqueEntityId,CategoryProps, CategoryPropsJson> {
   constructor(public readonly props: CategoryProps, entityId?: UniqueEntityId) {
     Category.validate(props);
     super(props, entityId ?? new UniqueEntityId());
