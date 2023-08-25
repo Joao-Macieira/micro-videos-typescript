@@ -8,7 +8,11 @@ type StubEntityProps = {
   price: number;
 };
 
-class StubEntity extends Entity<StubEntityProps> {
+class StubEntity extends Entity<UniqueEntityId, StubEntityProps> {
+  constructor(props: StubEntityProps, entityId?: UniqueEntityId) {
+    super(props, entityId ?? new UniqueEntityId());
+  }
+
   toJSON(): Required<{ id: string; } & StubEntityProps> {
     return {
       id: this.id,
@@ -57,7 +61,7 @@ describe("InMemoryRepository unit tests", () => {
     let entityFound = await repository.findById(entity.id);
     expect(entity.toJSON()).toStrictEqual(entityFound.toJSON());
 
-    entityFound = await repository.findById(entity.uniqueEntityId);
+    entityFound = await repository.findById(entity.entityId);
     expect(entity.toJSON()).toStrictEqual(entityFound.toJSON());
   });
 
@@ -84,7 +88,7 @@ describe("InMemoryRepository unit tests", () => {
 
     const entityUpdated = new StubEntity(
       { name: "updated", price: 1 },
-      entity.uniqueEntityId
+      entity.entityId
     );
 
     await repository.update(entityUpdated);
@@ -116,7 +120,7 @@ describe("InMemoryRepository unit tests", () => {
     expect(repository.items).toHaveLength(0);
 
     await repository.insert(entity);
-    await repository.delete(entity.uniqueEntityId);
+    await repository.delete(entity.entityId);
 
     expect(repository.items).toHaveLength(0);
   });
