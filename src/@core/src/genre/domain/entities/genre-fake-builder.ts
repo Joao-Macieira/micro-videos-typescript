@@ -5,13 +5,10 @@ import { Chance } from "chance";
 type PropOrFactory<T> = T | ((index: number) => T);
 
 export class GenreFakeBuilder<TBuild = any> {
-  // auto generated in entity
   private _entity_id = undefined;
   private _name: PropOrFactory<string> = (_index) => this.chance.word();
   private _categories_id: PropOrFactory<CategoryId>[] = [];
-  //private _categories_id:
   private _is_active: PropOrFactory<boolean> = (_index) => true;
-  // auto generated in entity
   private _created_at = undefined;
 
   private countObjs;
